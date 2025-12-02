@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Adele Rescue</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11.25 16.25h1.5L12 17z'/%3E%3Cpath d='M16 14v.5'/%3E%3Cpath d='M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309'/%3E%3Cpath d='M8 14v.5'/%3E%3Cpath d='M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5'/%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #f97316;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+        }
+        body { 
+            font-family: var(--font-body); 
+            background-color: #f8fafc;
+            color: #475569;
+        }
+        h1, h2, h3, h4, h5, h6 { 
+            font-family: var(--font-heading); 
+            color: #1e293b;
+        }
+        .btn-primary {
+            background-image: linear-gradient(to right, var(--color-primary) 0%, #fb923c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 9999px;
+            font-weight: 700;
+            padding: 0.85rem 1.75rem;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="text-center max-w-lg">
+        <div class="mb-8">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-24 h-24 text-orange-500 mx-auto animate-bounce"><path d="M11.25 16.25h1.5L12 17z"/><path d="M16 14v.5"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309"/><path d="M8 14v.5"/><path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/></svg>
+        </div>
+        <h1 class="text-6xl md:text-8xl font-black text-slate-800 mb-4">404</h1>
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-700 mb-4">Oops! Page Not Found.</h2>
+        <p class="text-slate-500 mb-8 leading-relaxed">It looks like the page you're looking for has gone for a walk. Let's get you back on the right trail.</p>
+        <a href="/index.html" class="btn-primary inline-block">
+            Return to Homepage
+        </a>
+    </div>
+
+</body>
+</html>

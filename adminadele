@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Adele Rescue</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11.25 16.25h1.5L12 17z'/%3E%3Cpath d='M16 14v.5'/%3E%3Cpath d='M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309'/%3E%3Cpath d='M8 14v.5'/%3E%3Cpath d='M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5'/%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --color-primary: #f97316;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+        }
+        body { font-family: var(--font-body); }
+        h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); }
+        .sidebar-link.active {
+            background-color: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+        .sidebar-link.active i { color: white !important; }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            background-color: #f8fafc;
+            transition: all 0.2s ease;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        }
+        .table-action-btn {
+            height: 2rem;
+            width: 2rem;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+        #admin-login {
+            background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+        }
+        .login-notification {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+
+    <!-- Universal Modals and Overlays -->
+    <div id="toast-container" class="fixed top-5 right-5 z-[120] w-full max-w-xs flex flex-col gap-3"></div>
+    <div id="modal-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden"></div>
+    <div id="confirm-modal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[70] bg-white p-8 rounded-lg shadow-xl w-full max-w-md hidden">
+        <h3 class="text-xl font-bold mb-4" id="confirm-title">Are you sure?</h3>
+        <p class="text-slate-600 mb-6" id="confirm-message">This action cannot be undone.</p>
+        <div class="flex justify-end space-x-4">
+            <button id="confirm-cancel-btn" class="px-6 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 font-semibold">Cancel</button>
+            <button id="confirm-action-btn" class="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 font-semibold">Delete</button>
+        </div>
+    </div>
+    <div id="dog-form-modal" class="fixed inset-0 z-[70] hidden items-start justify-center p-4 overflow-y-auto"></div>
+
+    <!-- Admin Login Screen -->
+    <div id="admin-login" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden grid md:grid-cols-2">
+            <div class="p-8 sm:p-12">
+                <div class="flex items-center space-x-3 mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-orange-500"><path d="M11.25 16.25h1.5L12 17z"/><path d="M16 14v.5"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309"/><path d="M8 14v.5"/><path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/></svg>
+                    <h1 class="text-2xl font-bold">Admin Panel</h1>
+                </div>
+                <h2 class="text-3xl font-bold text-slate-800">Welcome Back</h2>
+                <p class="text-slate-500 mb-8">Please sign in to continue.</p>
+
+                <div id="login-notification" class="login-notification hidden p-3 rounded-lg mb-4 text-sm font-semibold"></div>
+
+                <div class="space-y-4">
+                     <input type="email" id="admin-email" placeholder="Email" class="form-input">
+                     <input type="password" id="admin-password" placeholder="Password" class="form-input">
+                </div>
+
+                <div class="flex justify-end mt-4 mb-6">
+                    <a href="#" id="forgot-password-link" class="text-sm font-semibold text-orange-500 hover:underline">Forgot password?</a>
+                </div>
+                
+                <button id="admin-login-btn" class="w-full py-3 px-4 bg-slate-800 text-white rounded-lg shadow-sm hover:bg-slate-700 transition-colors font-bold flex items-center justify-center">
+                    <span>Log In</span>
+                </button>
+            </div>
+            <div class="hidden md:block bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1548681528-6a5c45b66b42?q=80&w=2787&auto=format&fit=crop');">
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Structure -->
+    <div id="dashboard-container" class="hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+            <div class="p-6 flex items-center space-x-3 border-b h-20">
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-orange-500"><path d="M11.25 16.25h1.5L12 17z"/><path d="M16 14v.5"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309"/><path d="M8 14v.5"/><path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/></svg>
+                <span class="font-bold text-xl">Adele Rescue</span>
+            </div>
+            <nav class="p-4 space-y-2 flex flex-col h-[calc(100%-5rem)]">
+                <a href="#" data-page="dashboard" class="sidebar-link active flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 transition-colors"><i class="fa-solid fa-chart-pie w-6 text-center text-slate-500"></i><span>Dashboard</span></a>
+                <a href="#" data-page="dogs" class="sidebar-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 transition-colors"><i class="fa-solid fa-dog w-6 text-center text-slate-500"></i><span>Manage Dogs</span></a>
+                <a href="#" data-page="applications" class="sidebar-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 transition-colors"><i class="fa-solid fa-file-lines w-6 text-center text-slate-500"></i><span>Applications</span></a>
+                <a href="#" data-page="stories" class="sidebar-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 transition-colors"><i class="fa-solid fa-book-open w-6 text-center text-slate-500"></i><span>Success Stories</span></a>
+                <a href="#" data-page="donations" class="sidebar-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 transition-colors"><i class="fa-solid fa-hand-holding-dollar w-6 text-center text-slate-500"></i><span>Donations</span></a>
+                <a href="#" data-page="suggestions" class="sidebar-link flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-100 transition-colors"><i class="fa-solid fa-lightbulb w-6 text-center text-slate-500"></i><span>Suggestions</span></a>
+                <div class="flex-grow"></div>
+                <a href="#" id="admin-logout-btn" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-red-50 text-red-600 transition-colors"><i class="fa-solid fa-right-from-bracket w-6 text-center"></i><span>Log Out</span></a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="md:ml-64 transition-all duration-300 ease-in-out">
+            <!-- Mobile Header -->
+            <header class="md:hidden bg-white shadow p-4 flex justify-between items-center h-20">
+                <button id="hamburger-btn" class="text-2xl"><i class="fa-solid fa-bars"></i></button>
+                <div class="font-bold text-lg">Adele Rescue Admin</div>
+            </header>
+
+            <main class="p-4 sm:p-8">
+                <div id="dashboard-view" class="admin-page"></div>
+                <div id="dogs-view" class="admin-page hidden"></div>
+                <div id="applications-view" class="admin-page hidden"></div>
+                <div id="stories-view" class="admin-page hidden"></div>
+                <div id="donations-view" class="admin-page hidden"></div>
+                <div id="suggestions-view" class="admin-page hidden"></div>
+            </main>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, doc, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, writeBatch, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'adele-ug-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+           apiKey: "AIzaSyBEV2EHIX-gpWHvDGRW7-jS5vgUjh116t0",
+  authDomain: "adeledogrescueus.firebaseapp.com",
+  databaseURL: "https://adeledogrescueus-default-rtdb.firebaseio.com",
+  projectId: "adeledogrescueus",
+  storageBucket: "adeledogrescueus.firebasestorage.app",
+  messagingSenderId: "167907994269",
+  appId: "1:167907994269:web:a7925f013e1a5834f5c274",
+  measurementId: "G-DBEJNEQPT9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // --- DOM Elements ---
+        const adminLogin = document.getElementById('admin-login');
+        const dashboardContainer = document.getElementById('dashboard-container');
+        const adminPages = document.querySelectorAll('.admin-page');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const sidebar = document.getElementById('sidebar');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const loginNotification = document.getElementById('login-notification');
+
+        // --- App State ---
+        let currentAdmin = null;
+        let allDogs = []; // Cache all dogs for easy lookup
+
+        // --- Utility & Modal Functions ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-circle-xmark"></i>';
+            toast.className = `p-4 rounded-lg shadow-lg text-white font-semibold flex items-center gap-3 transform transition-all duration-300 translate-x-full opacity-0 ${type === 'success' ? 'bg-teal-500' : 'bg-red-500'}`;
+            toast.innerHTML = `<span>${icon}</span><p>${message}</p>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-x-full', 'opacity-0'), 10);
+            setTimeout(() => {
+                toast.classList.add('translate-x-full', 'opacity-0');
+                toast.addEventListener('transitionend', () => toast.remove());
+            }, 4000);
+        }
+
+        function showLoginNotification(message, type = 'error') {
+            loginNotification.textContent = message;
+            loginNotification.className = `login-notification p-3 rounded-lg mb-4 text-sm font-semibold ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+            loginNotification.classList.remove('hidden');
+        }
+
+        function hideLoginNotification() {
+            loginNotification.classList.add('hidden');
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId)?.classList.remove('hidden');
+            modalBackdrop.classList.remove('hidden');
+        }
+
+        function hideAllModals() {
+            document.querySelectorAll('.fixed.z-\\[70\\]').forEach(m => m.classList.add('hidden'));
+            document.getElementById('dog-form-modal').innerHTML = ''; // Clear form content
+            modalBackdrop.classList.add('hidden');
+        }
+
+        function confirmAction({ title, message, onConfirm }) {
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            showModal('confirm-modal');
+            const actionBtn = document.getElementById('confirm-action-btn');
+            const newActionBtn = actionBtn.cloneNode(true); // Prevent multiple listeners
+            actionBtn.parentNode.replaceChild(newActionBtn, actionBtn);
+
+            newActionBtn.addEventListener('click', () => {
+                onConfirm();
+                hideAllModals();
+            });
+        }
+        
+        // --- Page Switching ---
+        function switchAdminPage(pageId) {
+            adminPages.forEach(page => page.classList.toggle('hidden', page.id !== `${pageId}-view`));
+            sidebarLinks.forEach(link => link.classList.toggle('active', link.dataset.page === pageId));
+        }
+
+        // --- Authentication ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const adminDoc = await getDoc(doc(db, "admins", user.uid));
+                    if (adminDoc.exists()) {
+                        currentAdmin = user;
+                        adminLogin.style.display = 'none';
+                        dashboardContainer.classList.remove('hidden');
+                        switchAdminPage('dashboard');
+                        initializeDashboard();
+                    } else {
+                        signOut(auth);
+                        showLoginNotification("You are not authorized to access this panel.", "error");
+                    }
+                } catch (error) {
+                    console.error("Auth check error:", error);
+                    signOut(auth);
+                }
+            } else {
+                currentAdmin = null;
+                adminLogin.style.display = 'flex';
+                dashboardContainer.classList.add('hidden');
+                 document.getElementById('admin-email').value = '';
+                document.getElementById('admin-password').value = '';
+            }
+        });
+        
+        // --- Page Initializers ---
+        function initializeDashboard() {
+            // Listen to dogs collection to have it cached
+            onSnapshot(collection(db, `artifacts/${appId}/public/data/dogs`), (snapshot) => {
+                allDogs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            });
+            
+            renderDashboard();
+            renderDogsPage();
+            renderApplicationsPage();
+            renderStoriesPage();
+            renderDonationsPage();
+            renderSuggestionsPage();
+        }
+
+        function renderDashboard() {
+            const view = document.getElementById('dashboard-view');
+            view.innerHTML = `<h1 class="text-4xl font-black mb-8">Dashboard</h1>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md"><h3 class="font-bold text-slate-500">Total Dogs</h3><p id="total-dogs-stat" class="text-4xl font-bold mt-2">0</p></div>
+                    <div class="bg-white p-6 rounded-xl shadow-md"><h3 class="font-bold text-slate-500">Applications</h3><p id="total-apps-stat" class="text-4xl font-bold mt-2">0</p></div>
+                    <div class="bg-white p-6 rounded-xl shadow-md"><h3 class="font-bold text-slate-500">Total Donations</h3><p id="total-donations-stat" class="text-4xl font-bold mt-2">0</p></div>
+                    <div class="bg-white p-6 rounded-xl shadow-md"><h3 class="font-bold text-slate-500">Donation Amount</h3><p id="total-amount-stat" class="text-4xl font-bold mt-2">$0</p></div>
+                </div>`;
+            
+            onSnapshot(collection(db, `artifacts/${appId}/public/data/dogs`), snap => document.getElementById('total-dogs-stat').textContent = snap.size);
+            onSnapshot(collection(db, `artifacts/${appId}/public/data/applications`), snap => document.getElementById('total-apps-stat').textContent = snap.size);
+            onSnapshot(collection(db, `artifacts/${appId}/public/data/donations`), snap => {
+                document.getElementById('total-donations-stat').textContent = snap.size;
+                let totalAmount = 0;
+                snap.forEach(doc => totalAmount += doc.data().amount);
+                document.getElementById('total-amount-stat').textContent = `$${totalAmount.toLocaleString()}`;
+            });
+        }
+
+        // --- Dog Management ---
+        function renderDogsPage() {
+            const view = document.getElementById('dogs-view');
+            view.innerHTML = `<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4"><h1 class="text-4xl font-black">Manage Dogs</h1><button id="add-dog-btn" class="bg-orange-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-2 w-full sm:w-auto"><i class="fa-solid fa-plus"></i> Add New Dog</button></div><div id="dogs-table-container" class="bg-white rounded-lg shadow p-6"></div>`;
+            const container = document.getElementById('dogs-table-container');
+
+            onSnapshot(query(collection(db, `artifacts/${appId}/public/data/dogs`), orderBy("name")), (snapshot) => {
+                if (snapshot.empty) {
+                    container.innerHTML = `<p class="text-center text-slate-500">No dogs found. Add one to get started!</p>`;
+                    return;
+                }
+                let tableHtml = `<div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b"><th class="p-4">Image</th><th class="p-4">Name</th><th class="p-4">Breed</th><th class="p-4">Status</th><th class="p-4">Adopter</th><th class="p-4">Actions</th></tr></thead><tbody>`;
+                snapshot.docs.forEach(doc => {
+                    const dog = { id: doc.id, ...doc.data() };
+                    const statusColors = { 'Available': 'bg-green-100 text-green-800', 'Pending': 'bg-yellow-100 text-yellow-800', 'Adopted': 'bg-orange-100 text-orange-800' };
+                    tableHtml += `<tr class="border-b hover:bg-slate-50">
+                        <td class="p-4"><img src="${dog.img}" class="h-12 w-12 rounded-md object-cover" alt="${dog.name}"></td>
+                        <td class="p-4 font-semibold">${dog.name}</td>
+                        <td class="p-4">${dog.breed}</td>
+                        <td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${statusColors[dog.status] || ''}">${dog.status}</span></td>
+                        <td class="p-4 text-sm">${dog.adopterEmail || 'N/A'}</td>
+                        <td class="p-4"><div class="flex space-x-2"><button data-id="${dog.id}" class="edit-dog-btn table-action-btn bg-blue-100 text-blue-600 hover:bg-blue-200"><i class="fa-solid fa-pencil"></i></button><button data-id="${dog.id}" data-img="${dog.img}" class="delete-dog-btn table-action-btn bg-red-100 text-red-600 hover:bg-red-200"><i class="fa-solid fa-trash"></i></button></div></td>
+                    </tr>`;
+                });
+                tableHtml += `</tbody></table></div>`;
+                container.innerHTML = tableHtml;
+            });
+        }
+
+        function renderDogForm(dog = {}) {
+            const isEditing = !!dog.id;
+            const modalContainer = document.getElementById('dog-form-modal');
+            const temperamentOptions = ['Friendly', 'Playful', 'Calm', 'Loyal', 'Shy', 'Energetic', 'Affectionate', 'Brave', 'Smart'];
+            modalContainer.innerHTML = `
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl my-8">
+                <form id="dog-form" class="p-8 space-y-4">
+                    <h2 class="text-2xl font-bold mb-4">${isEditing ? 'Edit Dog' : 'Add New Dog'}</h2>
+                    <input type="hidden" name="id" value="${dog.id || ''}">
+                    <input type="hidden" name="existingImageUrl" value="${dog.img || ''}">
+                    <div><label class="font-semibold">Name</label><input type="text" name="name" class="form-input" value="${dog.name || ''}" required></div>
+                    <div><label class="font-semibold">Breed</label><input type="text" name="breed" class="form-input" value="${dog.breed || ''}" required></div>
+                    <div><label class="font-semibold">Bio</label><textarea name="bio" class="form-textarea" rows="4" required>${dog.bio || ''}</textarea></div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div><label class="font-semibold">Age</label><input type="text" name="age" class="form-input" value="${dog.age || ''}" required></div>
+                        <div><label class="font-semibold">Gender</label><select name="gender" class="form-select"><option ${dog.gender === 'Male' ? 'selected' : ''}>Male</option><option ${dog.gender === 'Female' ? 'selected' : ''}>Female</option></select></div>
+                        <div><label class="font-semibold">Size</label><select name="size" class="form-select"><option ${dog.size === 'Small' ? 'selected' : ''}>Small</option><option ${dog.size === 'Medium' ? 'selected' : ''}>Medium</option><option ${dog.size === 'Large' ? 'selected' : ''}>Large</option></select></div>
+                    </div>
+                    <div><label class="font-semibold">Temperament (select multiple)</label><select name="temperament" class="form-select h-48" multiple>${temperamentOptions.map(t => `<option ${dog.temperament?.includes(t) ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+                    <div><label class="font-semibold">Status</label><select name="status" class="form-select"><option ${dog.status === 'Available' ? 'selected' : ''}>Available</option><option ${dog.status === 'Pending' ? 'selected' : ''}>Pending</option><option ${dog.status === 'Adopted' ? 'selected' : ''}>Adopted</option></select></div>
+                    
+                    <!-- Adopter Fields -->
+                    <div id="adopter-fields" class="hidden space-y-4 border-t pt-4">
+                        <p class="font-bold text-orange-600 text-sm">MANUAL ADOPTION INFO</p>
+                        <div><label class="font-semibold">Adopter Email</label><input type="email" name="adopterEmail" class="form-input" value="${dog.adopterEmail || ''}"></div>
+                        <div><label class="font-semibold">Adopter User ID (Optional)</label><input type="text" name="adopterId" class="form-input" value="${dog.adopterId || ''}"></div>
+                    </div>
+
+                    <div><label class="font-semibold block mb-2">Dog of the Week?</label><input type="checkbox" name="dogOfTheWeek" class="h-5 w-5" ${dog.dogOfTheWeek ? 'checked' : ''}></div>
+                    <div><label class="font-semibold">Image</label><input type="file" name="image" class="form-input" accept="image/*">
+                        ${isEditing && dog.img ? `<p class="text-xs mt-1 text-slate-500">Current: ${dog.img.split('%2F').pop().split('?')[0]}.<br>Leave empty to keep existing image.</p>` : ''}
+                    </div>
+                    <div class="flex justify-end gap-4 pt-4"><button type="button" id="cancel-dog-form" class="px-6 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 font-semibold">Cancel</button><button type="submit" class="px-6 py-2 rounded-lg bg-orange-500 text-white hover:bg-orange-600 font-semibold">${isEditing ? 'Save Changes' : 'Add Dog'}</button></div>
+                </form>
+            </div>`;
+            modalContainer.classList.remove('hidden');
+            modalContainer.classList.add('flex');
+            modalBackdrop.classList.remove('hidden');
+
+            // Add logic to show/hide adopter fields
+            const statusSelect = modalContainer.querySelector('select[name="status"]');
+            const adopterFields = modalContainer.querySelector('#adopter-fields');
+            const toggleAdopterFields = () => {
+                adopterFields.classList.toggle('hidden', statusSelect.value !== 'Adopted');
+            };
+            statusSelect.addEventListener('change', toggleAdopterFields);
+            toggleAdopterFields(); // Initial check
+        }
+
+        async function handleDogFormSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const dogId = formData.get('id');
+            const isEditing = !!dogId;
+            const imageFile = formData.get('image');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+            let imageUrl = formData.get('existingImageUrl');
+
+            try {
+                if (imageFile && imageFile.size > 0) {
+                    if(imageUrl && isEditing) {
+                        try {
+                            const oldImageRef = ref(storage, imageUrl);
+                            await deleteObject(oldImageRef);
+                        } catch(error) {
+                            console.warn("Old image not found for deletion, probably already removed:", error);
+                        }
+                    }
+                    const storageRef = ref(storage, `dogs/${Date.now()}_${imageFile.name}`);
+                    const snapshot = await uploadBytes(storageRef, imageFile);
+                    imageUrl = await getDownloadURL(snapshot.ref);
+                }
+
+                if (!imageUrl && !isEditing) {
+                    throw new Error("An image is required for new dogs.");
+                }
+
+                const temperament = Array.from(form.elements.temperament.selectedOptions).map(option => option.value);
+
+                const dogData = {
+                    name: formData.get('name'),
+                    breed: formData.get('breed'),
+                    bio: formData.get('bio'),
+                    age: formData.get('age'),
+                    gender: formData.get('gender'),
+                    size: formData.get('size'),
+                    temperament: temperament,
+                    status: formData.get('status'),
+                    dogOfTheWeek: form.elements.dogOfTheWeek.checked,
+                    img: imageUrl,
+                    adopterEmail: formData.get('status') === 'Adopted' ? formData.get('adopterEmail') : null,
+                    adopterId: formData.get('status') === 'Adopted' ? formData.get('adopterId') : null
+                };
+                
+                const dogsCol = collection(db, `artifacts/${appId}/public/data/dogs`);
+                if (dogId) {
+                    await updateDoc(doc(dogsCol, dogId), dogData);
+                    showToast('Dog updated successfully!', 'success');
+                } else {
+                    await addDoc(dogsCol, dogData);
+                    showToast('Dog added successfully!', 'success');
+                }
+                hideAllModals();
+            } catch (error) {
+                console.error("Error saving dog:", error);
+                showToast(error.message || 'An error occurred.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = isEditing ? 'Save Changes' : 'Add Dog';
+            }
+        }
+        
+        // --- ADOPTION MANAGEMENT ---
+        function renderApplicationsPage() {
+            const view = document.getElementById('applications-view');
+            view.innerHTML = `<h1 class="text-4xl font-black mb-8">Pending Adoption Applications</h1><div id="apps-container"></div>`;
+            const container = document.getElementById('apps-container');
+            const q = query(collection(db, `artifacts/${appId}/public/data/applications`), where('status', '==', 'Pending'), orderBy('submittedAt', 'desc'));
+            
+            onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    container.innerHTML = `<p class="text-center text-slate-500 bg-white p-8 rounded-lg shadow">No pending applications.</p>`;
+                    return;
+                }
+                
+                const appsByDog = {};
+                snapshot.forEach(doc => {
+                    const app = { id: doc.id, ...doc.data() };
+                    if (!appsByDog[app.dogId]) {
+                        appsByDog[app.dogId] = {
+                            dogName: app.dogName,
+                            applications: []
+                        };
+                    }
+                    appsByDog[app.dogId].applications.push(app);
+                });
+
+                let html = '';
+                for (const dogId in appsByDog) {
+                    const dogData = appsByDog[dogId];
+                    const dogImage = allDogs.find(d => d.id === dogId)?.img || 'https://placehold.co/100x100/f97316/white?text=Dog';
+                    
+                    html += `<div class="bg-white p-6 rounded-lg shadow mb-6">
+                        <div class="flex items-center gap-4 mb-4 border-b pb-4">
+                            <img src="${dogImage}" class="w-16 h-16 rounded-md object-cover" alt="${dogData.dogName}">
+                            <h3 class="text-2xl font-bold text-slate-800">${dogData.dogName}</h3>
+                        </div>
+                        <ul class="space-y-2">`;
+                    
+                    dogData.applications.forEach(app => {
+                        const date = app.submittedAt ? new Date(app.submittedAt.seconds * 1000).toLocaleDateString() : 'N/A';
+                        html += `
+                            <li class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-md hover:bg-slate-50">
+                                <div class="mb-2 sm:mb-0">
+                                    <p class="font-semibold">${app.userEmail}</p>
+                                    <p class="text-sm text-slate-500">Applied on: ${date}</p>
+                                </div>
+                                <div class="flex space-x-2 flex-shrink-0">
+                                    <button data-app-id="${app.id}" data-dog-id="${app.dogId}" data-user-id="${app.userId}" data-user-email="${app.userEmail}" class="approve-app-btn table-action-btn bg-green-100 text-green-600 hover:bg-green-200"><i class="fa-solid fa-check"></i></button>
+                                    <button data-app-id="${app.id}" data-dog-id="${app.dogId}" class="reject-app-btn table-action-btn bg-red-100 text-red-600 hover:bg-red-200"><i class="fa-solid fa-times"></i></button>
+                                </div>
+                            </li>`;
+                    });
+                    html += `</ul></div>`;
+                }
+                container.innerHTML = html;
+            });
+        }
+        
+        // --- Other Management Pages ---
+        function renderStoriesPage() {
+            const view = document.getElementById('stories-view');
+            view.innerHTML = `<h1 class="text-4xl font-black mb-8">Success Stories</h1><div id="stories-table-container" class="bg-white rounded-lg shadow p-6"></div>`;
+            const container = document.getElementById('stories-table-container');
+            const q = query(collection(db, `artifacts/${appId}/public/data/stories`), orderBy('createdAt', 'desc'));
+            onSnapshot(q, (snapshot) => {
+                 if (snapshot.empty) {
+                    container.innerHTML = `<p class="text-center text-slate-500">No stories submitted yet.</p>`;
+                    return;
+                }
+                let tableHtml = `<div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b"><th class="p-4">Image</th><th class="p-4">Dog Name</th><th class="p-4">Author</th><th class="p-4">Status</th><th class="p-4">Actions</th></tr></thead><tbody>`;
+                snapshot.forEach(doc => {
+                    const story = { id: doc.id, ...doc.data() };
+                    const isPending = story.status === 'pending';
+                    tableHtml += `<tr class="border-b hover:bg-slate-50 ${isPending ? 'bg-yellow-50' : ''}">
+                        <td class="p-4"><img src="${story.img}" class="h-12 w-12 rounded-md object-cover" alt="${story.dogName}"></td>
+                        <td class="p-4 font-semibold">${story.dogName}</td>
+                        <td class="p-4">${story.name}</td>
+                        <td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${isPending ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">${story.status}</span></td>
+                        <td class="p-4"><div class="flex space-x-2">${isPending ? `<button data-id="${story.id}" class="approve-story-btn table-action-btn bg-green-100 text-green-600 hover:bg-green-200"><i class="fa-solid fa-check"></i></button>` : ''}<button data-id="${story.id}" data-img="${story.img}" class="delete-story-btn table-action-btn bg-red-100 text-red-600 hover:bg-red-200"><i class="fa-solid fa-trash"></i></button></div></td>
+                    </tr>`;
+                });
+                tableHtml += `</tbody></table></div>`;
+                container.innerHTML = tableHtml;
+            });
+        }
+
+        function renderDonationsPage() {
+            const view = document.getElementById('donations-view');
+            view.innerHTML = `<h1 class="text-4xl font-black mb-8">Donations</h1><div id="donations-log" class="bg-white rounded-lg shadow p-6"></div>`;
+            const donationsLog = document.getElementById('donations-log');
+            const q = query(collection(db, `artifacts/${appId}/public/data/donations`), orderBy('timestamp', 'desc'));
+            onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    donationsLog.innerHTML = `<p class="text-center text-slate-500">No donations yet.</p>`;
+                    return;
+                }
+                let logHtml = `<div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b"><th class="p-4">Payer</th><th class="p-4">Amount</th><th class="p-4">Date</th></tr></thead><tbody>`;
+                snapshot.docs.forEach(doc => {
+                    const data = doc.data();
+                    const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : 'N/A';
+                    logHtml += `<tr class="border-b hover:bg-slate-50"><td class="p-4">${data.payer}</td><td class="p-4 font-semibold text-green-600">$${data.amount}</td><td class="p-4">${date}</td></tr>`;
+                });
+                logHtml += `</tbody></table></div>`;
+                donationsLog.innerHTML = logHtml;
+            });
+        }
+
+        function renderSuggestionsPage() {
+            const view = document.getElementById('suggestions-view');
+            view.innerHTML = `<h1 class="text-4xl font-black mb-8">Community Suggestions</h1><div id="suggestions-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>`;
+            const container = document.getElementById('suggestions-container');
+            const q = query(collection(db, `artifacts/${appId}/public/data/suggestions`), orderBy('createdAt', 'desc'));
+            onSnapshot(q, (snapshot) => {
+                if(snapshot.empty) {
+                    container.innerHTML = `<p class="text-center text-slate-500 col-span-full">No suggestions yet.</p>`;
+                    return;
+                }
+                container.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const suggestion = {id: doc.id, ...doc.data()};
+                    const isNew = !suggestion.status || suggestion.status === 'new';
+                    const card = document.createElement('div');
+                    card.className = `bg-white p-6 rounded-lg shadow relative ${isNew ? 'bg-yellow-50' : ''}`;
+                    card.innerHTML = `
+                        <p class="text-slate-700 mb-4">"${suggestion.suggestion}"</p>
+                        <p class="text-sm text-slate-500 font-semibold">-- ${suggestion.userName || suggestion.userEmail}</p>
+                        <div class="absolute top-2 right-2 flex gap-2">
+                           ${isNew ? `<button data-id="${suggestion.id}" class="review-suggestion-btn table-action-btn bg-green-100 text-green-600 hover:bg-green-200" title="Mark as Reviewed"><i class="fa-solid fa-check"></i></button>` : ''}
+                           <button data-id="${suggestion.id}" class="delete-suggestion-btn table-action-btn bg-red-100 text-red-600 hover:bg-red-200" title="Delete Suggestion"><i class="fa-solid fa-times"></i></button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+        }
+        
+        // --- Event Listeners ---
+        document.addEventListener('click', async (e) => {
+            // Dog Management
+            if (e.target.closest('#add-dog-btn')) renderDogForm();
+            if (e.target.closest('#cancel-dog-form')) hideAllModals();
+            if (e.target.closest('#dog-form-modal') === e.target) hideAllModals();
+            
+            const dogForm = e.target.closest('form#dog-form');
+            if(dogForm && !dogForm.dataset.listenerAttached) {
+                dogForm.addEventListener('submit', handleDogFormSubmit);
+                dogForm.dataset.listenerAttached = 'true';
+            }
+            
+            const editBtn = e.target.closest('.edit-dog-btn');
+            if (editBtn) {
+                const dogDoc = await getDoc(doc(db, `artifacts/${appId}/public/data/dogs`, editBtn.dataset.id));
+                if (dogDoc.exists()) renderDogForm({ id: dogDoc.id, ...dogDoc.data() });
+            }
+
+            const deleteBtn = e.target.closest('.delete-dog-btn');
+            if (deleteBtn) {
+                confirmAction({
+                    title: 'Delete Dog?',
+                    message: 'This will permanently delete the dog record and its image.',
+                    onConfirm: async () => {
+                        try {
+                            await deleteDoc(doc(db, `artifacts/${appId}/public/data/dogs`, deleteBtn.dataset.id));
+                            if (deleteBtn.dataset.img) {
+                                const imgRef = ref(storage, deleteBtn.dataset.img);
+                                await deleteObject(imgRef);
+                            }
+                            showToast('Dog deleted successfully.', 'success');
+                        } catch (error) {
+                            console.error("Delete error: ", error);
+                            if(error.code === 'storage/object-not-found') {
+                                showToast('Dog record deleted. Image was not found in storage.', 'success');
+                            } else {
+                                showToast('Could not delete dog.', 'error');
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Application Management
+            const approveAppBtn = e.target.closest('.approve-app-btn');
+            if (approveAppBtn) {
+                const { appId: approvedAppId, dogId, userId, userEmail } = approveAppBtn.dataset;
+                const batch = writeBatch(db);
+
+                // 1. Update Approved Application Status
+                const appRef = doc(db, `artifacts/${appId}/public/data/applications`, approvedAppId);
+                batch.update(appRef, { status: 'Approved' });
+                
+                // 2. Update Dog Status and Adopter Info
+                const dogRef = doc(db, `artifacts/${appId}/public/data/dogs`, dogId);
+                batch.update(dogRef, { status: 'Adopted', adopterId: userId, adopterEmail: userEmail });
+
+                // 3. Find and Reject all other pending applications for this dog
+                const otherAppsQuery = query(
+                    collection(db, `artifacts/${appId}/public/data/applications`),
+                    where("dogId", "==", dogId),
+                    where("status", "==", "Pending")
+                );
+                const otherAppsSnapshot = await getDocs(otherAppsQuery);
+                otherAppsSnapshot.forEach(doc => {
+                    if (doc.id !== approvedAppId) {
+                        batch.update(doc.ref, { status: 'Rejected' });
+                    }
+                });
+
+                await batch.commit();
+                showToast('Application approved! Other applications for this dog have been rejected.', 'success');
+            }
+
+            const rejectAppBtn = e.target.closest('.reject-app-btn');
+            if (rejectAppBtn) {
+                const { appId: rejectedAppId, dogId } = rejectAppBtn.dataset;
+                
+                const appRef = doc(db, `artifacts/${appId}/public/data/applications`, rejectedAppId);
+                await updateDoc(appRef, { status: 'Rejected' });
+
+                const otherAppsQuery = query(collection(db, `artifacts/${appId}/public/data/applications`), where("dogId", "==", dogId), where("status", "==", "Pending"));
+                const otherAppsSnapshot = await getDocs(otherAppsQuery);
+
+                if (otherAppsSnapshot.empty) {
+                    const dogRef = doc(db, `artifacts/${appId}/public/data/dogs`, dogId);
+                    await updateDoc(dogRef, { status: 'Available' });
+                }
+
+                showToast('Application rejected.', 'success');
+            }
+            // Other Management
+            const approveStoryBtn = e.target.closest('.approve-story-btn');
+            if (approveStoryBtn) {
+                await updateDoc(doc(db, `artifacts/${appId}/public/data/stories`, approveStoryBtn.dataset.id), { status: 'approved' });
+                showToast('Story approved!', 'success');
+            }
+            const deleteStoryBtn = e.target.closest('.delete-story-btn');
+            if(deleteStoryBtn) {
+                 confirmAction({ title: 'Delete Story?', message: 'This will delete the story and its image.', onConfirm: async () => {
+                    await deleteDoc(doc(db, `artifacts/${appId}/public/data/stories`, deleteStoryBtn.dataset.id));
+                    if (deleteStoryBtn.dataset.img) {
+                        try { await deleteObject(ref(storage, deleteStoryBtn.dataset.img)); } catch (e) { console.warn("Image delete failed, may have already been removed.")}
+                    }
+                    showToast('Story deleted.', 'success');
+                }});
+            }
+             const deleteSuggestionBtn = e.target.closest('.delete-suggestion-btn');
+            if(deleteSuggestionBtn) {
+                 confirmAction({ title: 'Delete Suggestion?', message: 'This will permanently delete this suggestion.', onConfirm: async () => {
+                    await deleteDoc(doc(db, `artifacts/${appId}/public/data/suggestions`, deleteSuggestionBtn.dataset.id));
+                    showToast('Suggestion deleted.', 'success');
+                }});
+            }
+            const reviewSuggestionBtn = e.target.closest('.review-suggestion-btn');
+            if(reviewSuggestionBtn) {
+                try {
+                    const suggestionRef = doc(db, `artifacts/${appId}/public/data/suggestions`, reviewSuggestionBtn.dataset.id);
+                    await updateDoc(suggestionRef, { status: 'reviewed' });
+                    showToast('Suggestion marked as reviewed.', 'success');
+                } catch(error) {
+                    showToast('Could not update suggestion.', 'error');
+                    console.error("Error reviewing suggestion:", error);
+                }
+            }
+        });
+        
+        document.getElementById('admin-login-btn').addEventListener('click', async () => {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            const loginBtn = document.getElementById('admin-login-btn');
+            
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+            hideLoginNotification();
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // Auth state change will handle redirect
+            } catch (error) {
+                let message = 'An unknown error occurred.';
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                    message = 'Invalid credentials. Please try again.';
+                }
+                showLoginNotification(message, 'error');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = `<span>Log In</span>`;
+            }
+        });
+
+        document.getElementById('forgot-password-link').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            if (!email) {
+                showLoginNotification('Please enter your email address to reset your password.', 'error');
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showLoginNotification('Password reset email sent! Please check your inbox.', 'success');
+            } catch (error) {
+                showLoginNotification('Could not send password reset email. Please check the address.', 'error');
+            }
+        });
+
+        // Clear notifications on input
+        ['admin-email', 'admin-password'].forEach(id => {
+            document.getElementById(id).addEventListener('input', hideLoginNotification);
+        });
+
+        document.getElementById('admin-logout-btn').addEventListener('click', () => signOut(auth));
+        
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                if(link.id !== 'admin-logout-btn') {
+                    switchAdminPage(link.dataset.page);
+                    if (window.innerWidth < 768) {
+                        sidebar.classList.add('-translate-x-full'); // Hide sidebar on mobile after click
+                    }
+                }
+            });
+        });
+
+        hamburgerBtn.addEventListener('click', () => sidebar.classList.toggle('-translate-x-full'));
+        modalBackdrop.addEventListener('click', hideAllModals);
+        document.getElementById('confirm-cancel-btn').addEventListener('click', hideAllModals);
+
+    </script>
+</body>
+</html>
+

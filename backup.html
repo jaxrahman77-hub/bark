@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adele Rescue - Give Paws a Second Chance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11.25 16.25h1.5L12 17z'/%3E%3Cpath d='M16 14v.5'/%3E%3Cpath d='M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309'/%3E%3Cpath d='M8 14v.5'/%3E%3Cpath d='M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5'/%3E%3C/svg%3E">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        :root {
+            --color-primary: #f97316; /* Orange 500 */
+            --color-primary-dark: #ea580c; /* Orange 600 */
+            --color-secondary: #0d9488; /* Teal 600 */
+            --color-dark: #1e293b; /* Slate 800 */
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+        }
+
+        html.dark {
+            --color-dark: #f1f5f9;
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background-color: #f8fafc; /* Slate 50 */
+            color: #475569; /* Slate 600 */
+            overflow-x: hidden;
+        }
+        html.dark body {
+            background-color: #0f172a; /* Slate 900 */
+            color: #94a3b8; /* Slate 400 */
+        }
+        
+        .section-bg {
+             background-color: #f1f5f9;
+        }
+        html.dark .section-bg {
+            background-color: #1e293b; /* Slate 800 */
+        }
+
+        .btn {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 9999px;
+            font-weight: 700;
+            padding: 0.85rem 1.75rem;
+            letter-spacing: 0.5px;
+        }
+        .btn i { transition: transform 0.3s ease; }
+        .btn:hover i { transform: scale(1.2) rotate(10deg); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; background-image: none; background-color: #e2e8f0; }
+        html.dark .btn:disabled { background-color: #334155; }
+        .btn-primary {
+            background-image: linear-gradient(to right, var(--color-primary) 0%, #fb923c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+        }
+        .btn-secondary {
+            background-color: white;
+            color: var(--color-dark);
+            border: 1px solid #e2e8f0;
+        }
+        html.dark .btn-secondary {
+            background-color: #1e293b;
+            border-color: #334155;
+            color: #f1f5f9;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(30, 41, 59, 0.1);
+            border-color: #cbd5e1;
+        }
+        html.dark .btn-secondary:hover:not(:disabled) {
+             border-color: #475569;
+        }
+
+        h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); color: var(--color-dark); }
+        .brand-font { font-family: var(--font-heading); font-weight: 800; }
+        .section-title { font-size: 2.25rem; font-weight: 900; line-height: 1.2; }
+        @media (min-width: 640px) { .section-title { font-size: 2.75rem; } }
+        @media (min-width: 768px) { .section-title { font-size: 3.25rem; } }
+        .section-subtitle { font-size: 1.125rem; max-width: 650px; margin-left: auto; margin-right: auto; color: #64748b; line-height: 1.8; }
+        html.dark .section-subtitle { color: #94a3b8; }
+        @media (min-width: 768px) { .section-subtitle { font-size: 1.25rem; } }
+        .story-content h3 { font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; }
+        .story-content p { line-height: 1.8; margin-bottom: 1.5rem; }
+
+        .page-view { display: none; animation: fadeIn 0.6s ease-in-out; }
+        .page-view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .nav-link.active { color: var(--color-primary); }
+        .bottom-nav-link.active i, .bottom-nav-link.active span { color: var(--color-primary); }
+        .bottom-nav-link.active i { transform: scale(1.1) translateY(-2px); }
+        
+        .tab-btn.active { background-color: var(--color-primary) !important; color: white !important; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4); }
+        
+        .card { transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-12px); box-shadow: 0 25px 30px -10px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
+
+        #login-page.fade-out { animation: fadeOut 0.5s ease-in-out forwards; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; pointer-events: none; } }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        #main-header.scrolled {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        html.dark #main-header.scrolled {
+            background-color: rgba(15, 23, 42, 0.8);
+        }
+        
+        /* Custom file input */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        
+        /* Favorite button styles */
+        .favorite-btn {
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .favorite-btn:hover {
+            transform: scale(1.2);
+        }
+        .favorite-btn.favorited {
+            color: #ef4444; /* red-500 */
+            animation: bounceIn 0.4s ease;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+
+        /* My Adoptions Tabs */
+        .adoption-tab-btn {
+            color: #64748b; /* slate-500 */
+            border-bottom: 2px solid transparent;
+        }
+        .adoption-tab-btn.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+        html.dark .adoption-tab-btn {
+             color: #94a3b8; /* slate-400 */
+        }
+        .adoption-tab-content { display: none; }
+        .adoption-tab-content.active { display: block; }
+
+        /* Donation Feed & Leaderboard Animations */
+        .donation-feed-item, .leaderboard-item, .podium-item {
+            transform: scale(0.95);
+            opacity: 0;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* --- NEW TOAST STYLES --- */
+        .toast {
+            background-color: #fff;
+            color: #1e293b;
+            border-radius: 0.75rem; /* 12px */
+            padding: 1rem; /* 16px */
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem; /* 12px */
+            width: 100%;
+            max-width: 350px;
+            border-left: 4px solid;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.215, 0.610, 0.355, 1), opacity 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        html.dark .toast {
+            background-color: #1e293b; /* slate-800 */
+            color: #f1f5f9; /* slate-100 */
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2), 0 4px 6px -2px rgba(0,0,0,0.1);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast .icon-container {
+            flex-shrink: 0;
+            width: 2rem; /* 32px */
+            height: 2rem; /* 32px */
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem; /* 18px */
+        }
+
+        .toast.toast-success { border-color: #10b981; /* emerald-500 */ }
+        .toast.toast-success .icon-container { background-color: #d1fae5; color: #059669; }
+        html.dark .toast.toast-success .icon-container { background-color: #065f46; color: #6ee7b7; }
+
+
+        .toast.toast-error { border-color: #ef4444; /* red-500 */ }
+        .toast.toast-error .icon-container { background-color: #fee2e2; color: #dc2626; }
+        html.dark .toast.toast-error .icon-container { background-color: #991b1b; color: #fca5a5; }
+
+        .toast .toast-content .title {
+            font-weight: 700;
+            color: #1e293b; /* slate-800 */
+        }
+        html.dark .toast .toast-content .title {
+            color: #f1f5f9; /* slate-100 */
+        }
+        .toast .toast-content .message {
+            font-size: 0.875rem; /* 14px */
+            color: #475569; /* slate-600 */
+        }
+        html.dark .toast .toast-content .message {
+            color: #94a3b8; /* slate-400 */
+        }
+
+        .toast .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            animation: shrink 4s linear forwards;
+        }
+        .toast.toast-success .progress-bar { background-color: #10b981; }
+        .toast.toast-error .progress-bar { background-color: #ef4444; }
+
+
+        @keyframes shrink {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        /* --- NEW DONATION PAGE STYLES --- */
+        #donate-view {
+             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f1f5f9' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        html.dark #donate-view {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e293b' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .amount-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .amount-option .amount-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 2px solid #e2e8f0; /* slate-200 */
+            background-color: #f8fafc; /* slate-50 */
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            height: 100%;
+        }
+        html.dark .amount-option .amount-label {
+            border-color: #334155; /* slate-700 */
+            background-color: #1e293b; /* slate-800 */
+        }
+
+        .amount-option .amount-label:hover {
+            border-color: #fb923c; /* orange-400 */
+            transform: translateY(-2px);
+        }
+
+        .amount-option input[type="radio"]:checked + .amount-label {
+            border-color: var(--color-primary);
+            background-color: #fff7ed; /* orange-50 */
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.15);
+        }
+        html.dark .amount-option input[type="radio"]:checked + .amount-label {
+            background-color: rgba(249, 115, 22, 0.1); /* orange-500 with opacity */
+            border-color: var(--color-primary);
+        }
+        .amount-option input[type="radio"]:focus-visible + .amount-label {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
+        .amount-label .amount {
+            font-size: 1.875rem; /* 30px */
+            font-weight: 800;
+            color: var(--color-dark);
+            line-height: 1;
+        }
+        .amount-label .description {
+            font-size: 0.875rem; /* 14px */
+            color: #64748b; /* slate-500 */
+            margin-top: 0.25rem;
+        }
+        html.dark .amount-label .description {
+            color: #94a3b8; /* slate-400 */
+        }
+        
+        #checkout-btn {
+            font-weight: 700;
+            font-size: 1.125rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+    </style>
+</head>
+<body class="text-slate-600">
+    
+    <div class="overflow-clip">
+        <!-- CHANGE 1: Login page is now hidden by default -->
+        <div id="login-page" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 transition-opacity duration-500 bg-slate-100 dark:bg-slate-900">
+            <div class="w-full max-w-4xl bg-white dark:bg-slate-800 rounded-2xl shadow-2xl overflow-hidden grid md:grid-cols-2">
+                <div class="p-8 sm:p-12 order-2 md:order-1">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-orange-500"><path d="M11.25 16.25h1.5L12 17z"/><path d="M16 14v.5"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309"/><path d="M8 14v.5"/><path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/></svg>
+                        <h1 class="text-2xl font-bold brand-font">Adele Rescue</h1>
+                    </div>
+                    <h2 id="auth-title" class="text-3xl font-bold text-slate-800 dark:text-slate-100">Join Our Community</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mt-2 mb-6">Create an account or sign in to continue.</p>
+
+                    <div id="login-notification" class="hidden p-3 rounded-lg mb-4 text-sm font-semibold"></div>
+
+                    <div class="space-y-4">
+                        <button id="google-login-btn" class="w-full flex items-center justify-center space-x-3 py-3 px-4 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors">
+                            <i class="fa-brands fa-google text-lg"></i>
+                            <span class="font-semibold text-gray-700 dark:text-slate-200">Continue with Google</span>
+                        </button>
+                        <div class="flex items-center">
+                            <hr class="w-full border-slate-200 dark:border-slate-700"><span class="px-2 text-sm text-slate-400 font-semibold">OR</span><hr class="w-full border-slate-200 dark:border-slate-700">
+                        </div>
+                        <input type="email" id="email-input" placeholder="Email address" class="w-full p-3 rounded-lg bg-slate-100 dark:bg-slate-700 border-transparent focus:ring-2 focus:ring-orange-500">
+                        <input type="password" id="password-input" placeholder="Password" class="w-full p-3 rounded-lg bg-slate-100 dark:bg-slate-700 border-transparent focus:ring-2 focus:ring-orange-500">
+                        
+                        <div class="flex justify-end text-sm">
+                            <a href="#" id="forgot-password-link" class="font-semibold text-orange-500 hover:underline">Forgot password?</a>
+                        </div>
+
+                        <button id="email-auth-btn" class="w-full py-3 px-4 bg-slate-800 dark:bg-orange-500 text-white rounded-lg shadow-sm hover:bg-slate-700 dark:hover:bg-orange-600 transition-colors font-bold flex items-center justify-center">Sign In</button>
+                        <button id="guest-login-btn" class="w-full py-2 px-4 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors font-semibold">Continue as Guest</button>
+                    </div>
+                    <p id="auth-toggle-text" class="text-center text-slate-500 dark:text-slate-400 mt-6 text-sm">Don't have an account? <a href="#" id="show-signup" class="font-bold text-orange-500 hover:underline">Sign up</a></p>
+                </div>
+                 <div class="hidden md:block bg-cover bg-center order-1 md:order-2" style="background-image: url('https://images.unsplash.com/photo-1598875706250-21fa76813739?q=80&w=2835&auto=format&fit=crop');">
+                </div>
+            </div>
+        </div>
+        
+        <!-- CHANGE 2: App container is visible by default (removed opacity-0) -->
+        <div id="app-container" class="transition-opacity duration-500">
+            <div id="loading-overlay" class="fixed inset-0 z-[110] bg-gray-900 bg-opacity-75 flex items-center justify-center hidden"><div class="flex flex-col items-center"><i class="fa-solid fa-paw h-16 w-16 text-orange-500 animate-bounce text-6xl"></i><p class="mt-4 text-white text-lg font-medium">Processing...</p></div></div>
+            <div id="toast-container" class="fixed top-5 right-5 z-[120] w-full max-w-xs flex flex-col gap-3"></div>
+            <div id="gallery-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[100] hidden items-center justify-center p-4"><div class="relative max-w-5xl max-h-full"><img id="gallery-modal-image" src="" alt="Gallery image" class="w-auto h-auto max-w-full max-h-[90vh] rounded-lg shadow-2xl" loading="lazy"><button id="gallery-modal-close" class="absolute -top-3 -right-3 md:-top-5 md:-right-5 text-white bg-orange-500 rounded-full h-10 w-10 flex items-center justify-center hover:bg-orange-600 transition text-2xl" aria-label="Close gallery view">&times;</button></div></div>
+            <div id="dog-profile-modal" class="fixed inset-0 bg-black bg-opacity-70 z-[100] hidden items-center justify-center p-4 overflow-y-auto"><div id="dog-profile-modal-content" class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-4xl w-full mx-auto my-8 transform transition-all duration-300 scale-95 opacity-0"></div></div>
+
+            <header id="main-header" class="sticky top-0 z-50 transition-all duration-300"><div class="container mx-auto px-4 sm:px-6 py-4 flex items-center">
+                <a href="#" data-page="home" class="nav-link flex items-center space-x-3 text-xl sm:text-2xl md:text-3xl brand-font">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 md:w-10 md:h-10 text-orange-500"><path d="M11.25 16.25h1.5L12 17z"/><path d="M16 14v.5"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309"/><path d="M8 14v.5"/><path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/></svg>
+                    <span>Adele Rescue</span>
+                </a>
+                <div class="flex items-center space-x-2 md:space-x-4 ml-auto">
+                    <button id="theme-toggle" class="h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-sun" id="theme-icon-light"></i>
+                        <i class="fa-solid fa-moon hidden" id="theme-icon-dark"></i>
+                    </button>
+                    <a href="#" data-page="donate" class="nav-link btn btn-primary items-center justify-center space-x-2 hidden md:flex"><i class="fa-solid fa-hand-holding-dollar"></i><span>Donate Now</span></a>
+                    <div class="relative">
+                        <button id="user-menu-button" class="h-10 w-10 flex items-center justify-center rounded-full overflow-hidden hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors bg-slate-200 dark:bg-slate-700"><img id="user-avatar" class="h-full w-full object-cover hidden" alt="User avatar"><i id="user-icon-placeholder" class="fa-solid fa-user text-slate-500 dark:text-slate-400"></i></button>
+                        <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl py-2 z-50 origin-top-right transition-transform duration-200 scale-95 opacity-0">
+                            <a href="#" data-page="home" class="nav-link block px-4 py-2 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700">Home</a>
+                            <a href="#" data-page="adopt" class="nav-link block px-4 py-2 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700">Adopt</a>
+                            <a href="#" data-page="my-adoptions" class="nav-link block px-4 py-2 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700">My Adoptions</a>
+                            <a href="#" data-page="stories" class="nav-link block px-4 py-2 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700">Stories & Favorites</a>
+                            <a href="#" data-page="community" class="nav-link block px-4 py-2 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700">Community</a>
+                            <div class="my-1 border-t border-gray-100 dark:border-slate-700"></div>
+                            <a href="#" id="auth-action-btn" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </div></header>
+
+            <main class="mb-16">
+                <div id="home-view" class="page-view">
+                    <section class="container mx-auto px-4 md:px-6 pt-12 pb-24">
+                        <div class="text-center mb-16">
+                             <h1 class="text-4xl sm:text-5xl md:text-6xl font-black leading-tight mb-4">Give Paws a Second Chance</h1>
+                             <p class="section-subtitle">Your support provides rescue, rehabilitation, and rehoming for dogs in need.</p>
+                        </div>
+
+                        <div class="grid lg:grid-cols-3 lg:gap-12 items-start">
+                            <div class="lg:col-span-2">
+                                <img class="w-full object-cover rounded-2xl shadow-2xl mb-8" src="https://images.unsplash.com/photo-1583511655826-05700d52f4d9?q=80&w=2787&auto=format&fit=crop" alt="Happy dog receiving a pet" loading="lazy">
+                                <div class="story-content">
+                                    <h3>Our Mission: A New Leash on Life</h3>
+                                    <p>At Adele Rescue, we believe every dog deserves a loving home. Many come to us scared, neglected, or in need of urgent medical care. We provide them with a safe haven, nutritious food, and the veterinary attention they need to heal, both inside and out.</p>
+                                    <p>Our dedicated team of volunteers and staff work tirelessly to socialize each dog, understanding their unique personality to find them the perfect forever family. From the moment they arrive to the day they walk out our doors with a new family, we are committed to their well-being. But we can't do it alone.</p>
+                                </div>
+                            </div>
+                            <div class="lg:sticky top-28 h-fit mt-12 lg:mt-0">
+                                <div id="donation-panel" class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md border border-slate-100 dark:border-slate-700 text-center max-w-sm mx-auto reveal">
+                                    <p id="donation-summary-text" class="mb-3">
+                                        <span id="collectedAmount" class="text-3xl font-bold">$0</span> 
+                                        <span class="text-slate-600 dark:text-slate-400">raised of</span> 
+                                        <span id="goalAmount" class="font-bold">$20,000</span> 
+                                        <span class="text-slate-600 dark:text-slate-400">goal</span>
+                                    </p>
+                                    <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 mb-3">
+                                        <div id="progressBar" class="bg-teal-500 h-2.5 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                                    </div>
+                                    <p id="donation-count" class="text-sm font-medium mb-4">0 donations</p>
+                                    <div class="flex flex-col gap-3">
+                                        <button id="share-button" class="w-full py-3 rounded-lg bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-600 dark:to-slate-700 font-semibold hover:opacity-90 transition flex items-center justify-center gap-2"><i class="fa-solid fa-share-nodes"></i>Share</button>
+                                        <button data-page="donate" class="nav-link w-full py-3 rounded-lg bg-gradient-to-b from-orange-400 to-orange-500 font-semibold text-white hover:opacity-90 transition">Donate now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <div class="section-bg py-24">
+                        <div class="container mx-auto px-4 md:px-6">
+                            <section id="dog-of-the-week" class="hidden reveal"></section>
+                        </div>
+                    </div>
+
+                    <div class="container mx-auto px-4 md:px-6 py-24">
+                        <section class="reveal"><h2 class="section-title text-center mb-16">How You Can Help</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center"><div class="card bg-white dark:bg-slate-800 p-8 rounded-2xl border-t-4 border-orange-500 reveal"><i class="fa-solid fa-dog h-16 w-16 mx-auto text-orange-500 mb-6 text-5xl"></i><h3 class="text-2xl mb-2 font-bold">Adopt a Friend</h3><p class="leading-relaxed">Give a loving home to a deserving dog. Find your new best friend today.</p></div><div class="card bg-white dark:bg-slate-800 p-8 rounded-2xl border-t-4 border-teal-500 reveal" style="transition-delay: 150ms"><i class="fa-solid fa-heart h-16 w-16 mx-auto text-teal-500 mb-6 text-5xl"></i><h3 class="text-2xl mb-2 font-bold">Donate</h3><p class="leading-relaxed">Your contribution provides medical care, food, and shelter for our animals.</p></div><div class="card bg-white dark:bg-slate-800 p-8 rounded-2xl border-t-4 border-amber-500 reveal" style="transition-delay: 300ms"><i class="fa-solid fa-users h-16 w-16 mx-auto text-amber-500 mb-6 text-5xl"></i><h3 class="text-2xl mb-2 font-bold">Community</h3><p class="leading-relaxed">Join our community, see recent donations and share your suggestions.</p></div></div></section>
+                    </div>
+                </div>
+
+                <div id="adopt-view" class="page-view container mx-auto px-4 md:px-6 pt-12 pb-24">
+                    <div class="text-center mb-12">
+                        <h1 class="section-title mb-4">Find Your Fur-ever Friend</h1>
+                        <p class="section-subtitle">These wonderful dogs are waiting for a loving family. Could it be you?</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg mb-12 max-w-4xl mx-auto">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="relative w-full">
+                                <i class="fa-solid fa-cake-candles absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none"></i>
+                                <select id="filter-age" class="w-full bg-slate-100 dark:bg-slate-700 border-transparent rounded-full py-3 pl-12 pr-8 font-semibold text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none">
+                                    <option value="all">All Ages</option>
+                                    <option value="puppy">Puppy (Under 1yr)</option>
+                                    <option value="adult">Adult (1-7yrs)</option>
+                                    <option value="senior">Senior (8+ yrs)</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none"></i>
+                            </div>
+                            <div class="relative w-full">
+                                <i class="fa-solid fa-ruler-combined absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none"></i>
+                                <select id="filter-size" class="w-full bg-slate-100 dark:bg-slate-700 border-transparent rounded-full py-3 pl-12 pr-8 font-semibold text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none">
+                                    <option value="all">All Sizes</option><option value="small">Small</option><option value="medium">Medium</option><option value="large">Large</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none"></i>
+                            </div>
+                            <div class="relative w-full">
+                                <i class="fa-solid fa-venus-mars absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none"></i>
+                                <select id="filter-gender" class="w-full bg-slate-100 dark:bg-slate-700 border-transparent rounded-full py-3 pl-12 pr-8 font-semibold text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none">
+                                    <option value="all">All Genders</option><option value="male">Male</option><option value="female">Female</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none"></i>
+                            </div>
+                            <div class="relative w-full">
+                                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none"></i>
+                                <input id="filter-search" type="text" placeholder="Search by name..." class="w-full bg-slate-100 dark:bg-slate-700 border-transparent rounded-full py-3 pl-12 pr-4 font-semibold text-slate-600 dark:text-slate-300 placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="adoption-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+                </div>
+
+                <div id="my-adoptions-view" class="page-view container mx-auto px-4 md:px-6 pt-12 pb-24">
+                    <div class="text-center mb-12">
+                        <h1 class="section-title mb-4">My Adoptions</h1>
+                        <p class="section-subtitle">Manage your adopted friends, track their care fund, and see who is helping out!</p>
+                    </div>
+                    <div id="my-adoptions-grid" class="space-y-12">
+                    </div>
+                </div>
+                
+                <div id="stories-view" class="page-view container mx-auto px-4 md:px-6 pt-12 pb-24">
+                    <div id="favorites-section">
+                        <div class="text-center mb-12">
+                            <h2 class="section-title mb-4">My Favorite Pups</h2>
+                            <p class="section-subtitle">The lovely dogs you've saved for later.</p>
+                        </div>
+                        <div id="stories-favorites-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-24">
+                        </div>
+                        <hr class="my-24 border-slate-200 dark:border-slate-700">
+                    </div>
+
+                    <div class="text-center mb-16"><h1 class="section-title mb-4">Happy Tails & Success Stories</h1><p class="section-subtitle">Every adoption is a victory. Read about some of the amazing journeys from our shelter to their forever homes.</p></div><div id="success-stories-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24"></div><div class="text-center my-24"><h2 class="section-title mb-4">Rescue Gallery</h2><p class="section-subtitle">A glimpse into the daily life at our rescue center. See the moments of joy, recovery, and friendship.</p></div><div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div><div class="bg-teal-500 text-white p-12 rounded-3xl mt-24 text-center reveal"><h3 class="text-4xl font-extrabold mb-4">Share Your Story!</h3><p class="max-w-xl mx-auto mb-8">Have you adopted from us? We'd love to hear your Happy Tail! Your story can inspire others to adopt and find their own best friend.</p><button id="show-story-form" class="bg-white text-teal-600 font-bold py-3 px-8 rounded-full transition hover:bg-teal-50 hover:scale-105">Submit Your Story</button></div><div id="story-form-container" class="hidden mt-8 max-w-2xl mx-auto"><form id="story-form" class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-xl space-y-4"><input type="text" name="name" placeholder="Your Name" class="w-full p-4 rounded-xl bg-slate-100 dark:bg-slate-700 border-gray-300 dark:border-slate-600" required><input type="text" name="dogName" placeholder="Dog's Name" class="w-full p-4 rounded-xl bg-slate-100 dark:bg-slate-700 border-gray-300 dark:border-slate-600" required><textarea name="story" placeholder="Your Happy Tail" rows="4" class="w-full p-4 rounded-xl bg-slate-100 dark:bg-slate-700 border-gray-300 dark:border-slate-600" required></textarea><div class="file-input-wrapper w-full p-4 rounded-xl bg-slate-100 dark:bg-slate-700 border-gray-300 dark:border-slate-600"><label for="story-image" class="file-input-label text-slate-500"><i class="fa-solid fa-camera"></i> <span id="file-name-span">Upload a photo</span></label><input type="file" name="image" id="story-image" accept="image/*" class="w-full" required></div><button type="submit" class="w-full btn btn-primary py-3">Submit My Story</button></form></div>
+                </div>
+
+                <div id="community-view" class="page-view container mx-auto px-4 md:px-6 pt-12 pb-24">
+                    <div class="text-center mb-16">
+                        <h1 class="section-title mb-4">Community Hub</h1>
+                        <p class="section-subtitle">See the impact of our community and share your ideas with us!</p>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                        <div class="lg:col-span-2 space-y-12">
+                             <div>
+                                <h2 class="text-3xl font-bold mb-6 text-center lg:text-left">Top Donors</h2>
+                                <div id="leaderboard-container">
+                                    <!-- Improved leaderboard will be rendered here -->
+                                </div>
+                            </div>
+                            <div>
+                                <h2 class="text-3xl font-bold mb-6 text-center lg:text-left">Recent Donations</h2>
+                                <div id="community-donations-feed" class="space-y-4">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                             <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-xl lg:sticky top-28">
+                                <div class="text-center mb-6">
+                                    <i class="fa-solid fa-lightbulb text-4xl text-amber-400"></i>
+                                    <h2 class="text-2xl font-bold mt-2">Have a Suggestion?</h2>
+                                </div>
+                                <p class="mb-6 text-center text-sm text-slate-500">We'd love to hear your ideas on how we can improve.</p>
+                                <form id="suggestion-form" class="space-y-4">
+                                    <textarea name="suggestion" placeholder="Your suggestion..." rows="4" class="w-full p-4 rounded-xl bg-slate-100 dark:bg-slate-700 border-transparent focus:ring-2 focus:ring-orange-500 focus:border-transparent" required></textarea>
+                                    <button type="submit" class="w-full btn btn-primary">Submit Idea</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === START: NEW DONATION PAGE === -->
+                <div id="donate-view" class="page-view">
+                    <div class="container mx-auto px-4 md:px-6 pt-12 pb-24">
+                        <div class="max-w-5xl mx-auto grid lg:grid-cols-2 lg:gap-16 items-center">
+                            <!-- Left Column: Image and Impact Text -->
+                            <div class="hidden lg:block relative reveal">
+                                <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=2874&auto=format&fit=crop" alt="A happy dog wearing a bandana" class="rounded-3xl shadow-2xl w-full aspect-[4/5] object-cover">
+                                <div class="absolute bottom-6 left-6 right-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-2xl border border-white/20">
+                                    <h3 class="text-2xl font-bold mb-2">Every Dollar Makes a Difference</h3>
+                                    <p class="text-slate-600 dark:text-slate-300">Your donation funds critical medical care, nutritious food, and a safe shelter, giving dogs like this one a chance for a happy life.</p>
+                                </div>
+                            </div>
+                        
+                            <!-- Right Column: Donation Form -->
+                            <div class="w-full">
+                                <div class="text-center mb-8 lg:text-left">
+                                    <h1 class="section-title mb-2">Your Gift Saves Lives</h1>
+                                    <p class="section-subtitle !mx-0 !max-w-full">Choose an amount or enter your own. Every contribution helps us give paws a second chance.</p>
+                                </div>
+                        
+                                <div id="donation-container" class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-xl reveal space-y-6">
+                                    <!-- New Amount Selector -->
+                                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="donation-amount-selector">
+                                        <!-- Donation amounts are rendered here by JavaScript -->
+                                    </div>
+                        
+                                    <!-- Custom Amount -->
+                                    <div>
+                                        <label for="customAmount" class="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2 text-center">Or Enter a Custom Amount</label>
+                                        <div class="relative">
+                                            <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-lg font-bold text-slate-400">$</span>
+                                            <input type="number" id="customAmount" class="w-full text-center font-bold text-2xl bg-slate-100 dark:bg-slate-700/50 rounded-lg border-2 border-transparent focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-300 py-3" placeholder="0.00" min="1.00" step="0.01">
+                                        </div>
+                                    </div>
+                                    
+                                    <hr class="border-slate-200 dark:border-slate-700">
+                        
+                                    <!-- Donor Info -->
+                                    <div class="grid sm:grid-cols-2 gap-4">
+                                        <div>
+                                             <label for="donorName" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Your Name</label>
+                                             <input type="text" id="donorName" placeholder="Anonymous" class="w-full p-3 rounded-lg bg-slate-100 dark:bg-slate-700 border-transparent focus:ring-2 focus:ring-orange-500">
+                                        </div>
+                                        <div>
+                                             <label for="donorMessage" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Message (Optional)</label>
+                                             <input type="text" id="donorMessage" placeholder="For the pups!" class="w-full p-3 rounded-lg bg-slate-100 dark:bg-slate-700 border-transparent focus:ring-2 focus:ring-orange-500">
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                         <input type="checkbox" id="showPublicly" class="h-5 w-5 rounded text-orange-500 focus:ring-orange-500 border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-900" checked>
+                                         <label for="showPublicly" class="text-sm font-medium text-slate-600 dark:text-slate-300">Show my donation publicly</label>
+                                    </div>
+                        
+                                    <!-- Checkout Button -->
+                                    <div class="pt-2">
+                                        <button id="checkout-btn" class="w-full btn btn-primary py-4 text-lg" disabled>
+                                            <span>Select an amount</span>
+                                        </button>
+                                        <p class="text-xs text-center mt-3 text-slate-400 flex items-center justify-center gap-2">
+                                            <i class="fa-solid fa-lock"></i>
+                                            Secure payments powered by Stripe
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- === END: NEW DONATION PAGE === -->
+            </main>
+
+            <footer class="bg-slate-800 text-slate-300 pt-20 pb-24 md:pb-8">
+                <div class="container mx-auto px-6 max-w-6xl">
+                    <div class="grid md:grid-cols-3 gap-12 mb-8">
+                        <div class="md:col-span-1">
+                            <div class="flex items-center space-x-3 text-3xl text-white mb-4 brand-font">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-orange-500"><path d="M11.25 16.25h1.5L12 17z"/><path d="M16 14v.5"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309"/><path d="M8 14v.5"/><path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/></svg>
+                                <span>Adele Rescue</span>
+                            </div>
+                            <p class="text-sm leading-relaxed">Saving lives, one paw at a time. We are a non-profit organization dedicated to rescuing and rehoming dogs.</p>
+                        </div>
+                        <div class="grid grid-cols-2 md:col-span-2 gap-8">
+                            <div>
+                                <h4 class="font-bold text-white mb-4 uppercase tracking-wider">Quick Links</h4>
+                                <nav class="flex flex-col space-y-2 text-sm">
+                                    <a href="#" data-page="home" class="nav-link hover:text-orange-400 transition-colors">Home</a>
+                                    <a href="#" data-page="adopt" class="nav-link hover:text-orange-400 transition-colors">Adopt</a>
+                                    <a href="#" data-page="stories" class="nav-link hover:text-orange-400 transition-colors">Success Stories</a>
+                                    <a href="#" data-page="community" class="nav-link hover:text-orange-400 transition-colors">Community</a>
+                                    <a href="#" data-page="donate" class="nav-link hover:text-orange-400 transition-colors">Donate</a>
+                                </nav>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-4 uppercase tracking-wider">Contact Us</h4>
+                                <p class="text-sm">Sunrise Florida,USA<br>adeledogrescuer@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-700 mt-8 pt-6 text-center text-xs text-slate-500">
+                        <p>&copy; 2025 Adele Rescue. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </footer>
+
+            <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg z-40 grid grid-cols-5 items-center py-1 border-t border-gray-200 dark:border-slate-700 shadow-[0_-2px_5px_rgba(0,0,0,0.05)]">
+                <a href="#" data-page="home" class="bottom-nav-link flex flex-col items-center justify-center text-gray-500 dark:text-slate-400 w-full p-1 transition-transform duration-200">
+                    <i class="fa-solid fa-house text-xl"></i><span class="text-xs font-bold mt-1">Home</span>
+                </a>
+                <a href="#" data-page="adopt" class="bottom-nav-link flex flex-col items-center justify-center text-gray-500 dark:text-slate-400 w-full p-1 transition-transform duration-200">
+                    <i class="fa-solid fa-shield-dog text-xl"></i><span class="text-xs font-bold mt-1">Adopt</span>
+                </a>
+                <a href="#" data-page="stories" class="bottom-nav-link flex flex-col items-center justify-center text-gray-500 dark:text-slate-400 w-full p-1 transition-transform duration-200">
+                     <i class="fa-solid fa-book-open text-xl"></i><span class="text-xs font-bold mt-1">Stories</span>
+                </a>
+                <a href="#" data-page="community" class="bottom-nav-link flex flex-col items-center justify-center text-gray-500 dark:text-slate-400 w-full p-1 transition-transform duration-200">
+                    <i class="fa-solid fa-users text-xl"></i><span class="text-xs font-bold mt-1">Community</span>
+                </a>
+                 <a href="#" data-page="donate" class="bottom-nav-link flex flex-col items-center justify-center text-gray-500 dark:text-slate-400 w-full p-1 transition-transform duration-200">
+                    <i class="fa-solid fa-handshake text-xl"></i><span class="text-xs font-bold mt-1">Donate</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- Firebase SDK Imports ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, signInAnonymously, signInWithCustomToken, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, onSnapshot, addDoc, updateDoc, deleteDoc, setDoc, serverTimestamp, query, where, orderBy, limit, writeBatch, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+
+        // --- App Configuration ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'adele-ug-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyBEV2EHIX-gpWHvDGRW7-jS5vgUjh116t0",
+            authDomain: "adeledogrescueus.firebaseapp.com",
+            databaseURL: "https://adeledogrescueus-default-rtdb.firebaseio.com",
+            projectId: "adeledogrescueus",
+            storageBucket: "adeledogrescueus.appspot.com",
+            messagingSenderId: "167907994269",
+            appId: "1:167907994269:web:a7925f013e1a5834f5c274",
+            measurementId: "G-DBEJNEQPT9"
+        };
+        const stripeKey = 'pk_live_51SFNTaInvYUWbaBNkH9UU6I9XBTp2RicXpEjDQTd47vhiYLcP863DI1tr16fmIwkoY5CJS14aGelgDUgzYvSf9wy00BU4EY8nD';
+
+        // --- Global App State ---
+        let app, auth, db, storage, stripe;
+        let allDogs = [];
+        let userFavorites = new Set();
+        let selectedAmount = 0;
+        let currentUser = null;
+        const GOAL_AMOUNT = 20000;
+        let myAdoptionsUnsubscribe = null;
+        let myAssistedUnsubscribe = null;
+        let myManagedDogs = new Map();
+        let favoritesUnsubscribe = null;
+        const dogDonationUnsubscribes = {};
+        let filterTimeout;
+
+        // --- DOM Elements ---
+        const appContainer = document.getElementById('app-container');
+        const pageViews = document.querySelectorAll('.page-view');
+        const allNavLinks = document.querySelectorAll('.nav-link, .bottom-nav-link');
+        const adoptionGrid = document.getElementById('adoption-grid');
+        const dogProfileModal = document.getElementById('dog-profile-modal');
+        const dogProfileModalContent = document.getElementById('dog-profile-modal-content');
+        const loginNotification = document.getElementById('login-notification');
+        
+        function showToast(message, type = 'success', title = '') {
+            const toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) return;
+            
+            const toast = document.createElement('div');
+            const toastTypeClass = type === 'success' ? 'toast-success' : 'toast-error';
+            const icon = type === 'success' ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-triangle-exclamation"></i>';
+            const toastTitle = title || (type === 'success' ? 'Success' : 'Error');
+
+            toast.className = `toast ${toastTypeClass}`;
+            
+            toast.innerHTML = `
+                <div class="icon-container">${icon}</div>
+                <div class="toast-content">
+                    <p class="title">${toastTitle}</p>
+                    <p class="message">${message}</p>
+                </div>
+                <div class="progress-bar"></div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.addEventListener('transitionend', () => toast.remove());
+            }, 4000);
+        }
+
+        function showLoginNotification(message, type = 'error') {
+            loginNotification.textContent = message;
+            loginNotification.className = `p-3 rounded-lg mb-4 text-sm font-semibold ${type === 'error' ? 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' : 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300'}`;
+            loginNotification.classList.remove('hidden');
+        }
+
+        function hideLoginNotification() {
+            loginNotification.classList.add('hidden');
+        }
+
+        // CHANGE 3: NEW FUNCTION TO SHOW LOGIN MODAL
+        function showLoginPage(message = null) {
+            const loginPage = document.getElementById('login-page');
+            if (loginPage) {
+                loginPage.classList.remove('hidden');
+                loginPage.classList.remove('fade-out'); // Ensure it's visible if previously faded out
+                if (message) {
+                    showLoginNotification(message, 'error');
+                }
+            }
+        }
+
+        function timeAgo(timestamp) {
+            if (!timestamp) return 'just now';
+            const now = new Date();
+            const secondsPast = (now.getTime() - timestamp.toDate().getTime()) / 1000;
+
+            if (secondsPast < 60) return `${Math.round(secondsPast)}s ago`;
+            if (secondsPast < 3600) return `${Math.round(secondsPast / 60)}m ago`;
+            if (secondsPast <= 86400) return `${Math.round(secondsPast / 3600)}h ago`;
+            
+            const day = timestamp.toDate();
+            const dayString = day.toLocaleDateString(undefined, { day: 'numeric', month: 'short'});
+            return dayString;
+        }
+        
+        // --- Rendering Functions ---
+        function createSkeletonCard() {
+             const card = document.createElement('div');
+             card.className = 'bg-white dark:bg-slate-800 rounded-2xl overflow-hidden animate-pulse';
+             card.innerHTML = `
+                <div class="w-full h-64 bg-slate-200 dark:bg-slate-700"></div>
+                <div class="p-6">
+                    <div class="h-6 w-1/2 bg-slate-200 dark:bg-slate-700 rounded-md mb-3"></div>
+                    <div class="h-4 w-1/3 bg-slate-200 dark:bg-slate-700 rounded-md mb-6"></div>
+                    <div class="h-4 w-full bg-slate-200 dark:bg-slate-700 rounded-md mb-2"></div>
+                    <div class="h-4 w-full bg-slate-200 dark:bg-slate-700 rounded-md mb-2"></div>
+                    <div class="h-4 w-3/4 bg-slate-200 dark:bg-slate-700 rounded-md mb-6"></div>
+                    <div class="h-12 w-full bg-slate-300 dark:bg-slate-600 rounded-full"></div>
+                </div>`;
+             return card;
+        }
+
+        function createDogCard(dog) {
+             const card = document.createElement('div');
+             card.className = 'card bg-white dark:bg-slate-800 rounded-2xl overflow-hidden flex flex-col';
+             const statusColor = dog.status === 'Available' ? 'bg-teal-100 text-teal-800' : (dog.status === 'Adopted' ? 'bg-orange-100 text-orange-800' : 'bg-amber-100 text-amber-800');
+             const isFavorited = userFavorites.has(dog.id);
+             
+             card.innerHTML = `
+                <div class="relative group">
+                    <img src="${dog.img}" alt="${dog.name}" class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                    <button class="favorite-btn absolute top-4 left-4 h-10 w-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-slate-500 ${isFavorited ? 'favorited' : ''}" data-dog-id="${dog.id}" aria-label="Favorite ${dog.name}">
+                        <i class="fa-solid fa-heart text-xl"></i>
+                    </button>
+                    <span class="absolute top-4 right-4 ${statusColor} px-3 py-1 text-sm font-bold rounded-full">${dog.status}</span>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="text-2xl font-bold">${dog.name}</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">${dog.breed}</p>
+                    <p class="dark:text-slate-300 mb-6 flex-grow leading-relaxed">${dog.bio.substring(0, 90)}...</p>
+                    <button class="adopt-me-btn mt-auto w-full btn btn-primary" data-dog-id="${dog.id}">Meet ${dog.name}</button>
+                </div>`;
+             return card;
+        }
+
+        function renderAdoptionGrid(dogsToRender = allDogs) {
+             if (!adoptionGrid) return;
+             adoptionGrid.innerHTML = '';
+             if (dogsToRender.length) {
+                 dogsToRender.forEach(dog => adoptionGrid.appendChild(createDogCard(dog)));
+             } else {
+                adoptionGrid.innerHTML = `
+                        <div class="col-span-full text-center py-16 px-6">
+                            <i class="fa-solid fa-magnifying-glass text-6xl text-slate-300 mb-6"></i>
+                            <h3 class="text-2xl font-bold text-slate-700 dark:text-slate-300 mb-2">No Pups Found</h3>
+                            <p class="text-slate-500 dark:text-slate-400">No dogs match your current filters. Try a different search!</p>
+                        </div>`;
+             }
+        }
+        
+        function renderFavoritesGrid() {
+            const grid = document.getElementById('stories-favorites-grid');
+            if (!grid) return;
+
+            const section = document.getElementById('favorites-section');
+
+            if (!currentUser || currentUser.isAnonymous) {
+                if (section) section.style.display = 'none';
+                return;
+            }
+             if (section) section.style.display = 'block';
+
+            const favoriteDogs = allDogs.filter(dog => userFavorites.has(dog.id));
+
+            if (!favoriteDogs.length) {
+                grid.innerHTML = `<div class="text-center col-span-full"><p class="text-slate-500 dark:text-slate-400">You haven't favorited any dogs yet. <a href="#adopt" data-page="adopt" class="nav-link text-orange-500 font-bold hover:underline">Find a friend today!</a></p></div>`;
+                return;
+            }
+            grid.innerHTML = '';
+            favoriteDogs.forEach(dog => grid.appendChild(createDogCard(dog)));
+        }
+
+        function renderDogOfTheWeek(dog) {
+             if (!dog) return;
+             const container = document.getElementById('dog-of-the-week');
+             if(!container) return;
+             container.innerHTML = `<div class="bg-gradient-to-br from-orange-500 to-amber-500 text-white rounded-3xl p-8 md:p-12 shadow-2xl"><h2 class="text-4xl font-extrabold text-center mb-8">Dog of the Week</h2><div class="grid md:grid-cols-2 gap-8 items-center"><img src="${dog.img}" class="rounded-2xl shadow-lg w-full h-96 object-cover" loading="lazy" alt="${dog.name}"><div><h3 class="text-5xl font-black">${dog.name}</h3><p class="text-lg text-amber-200 mt-2 mb-4">${dog.breed}</p><p class="leading-relaxed opacity-90">${dog.bio}</p><button class="adopt-me-btn mt-8 bg-white text-orange-600 font-bold py-3 px-8 rounded-full transition hover:scale-105" data-dog-id="${dog.id}">Learn More About ${dog.name}</button></div></div></div>`;
+             container.classList.remove('hidden');
+        }
+
+        function renderStoriesAndGallery(stories) {
+             const storiesGrid = document.getElementById('success-stories-grid');
+             const galleryGrid = document.getElementById('gallery-grid');
+             if (storiesGrid) storiesGrid.innerHTML = stories.map(s => `<div class="card bg-white dark:bg-slate-800 rounded-xl overflow-hidden group"><img src="${s.img}" alt="${s.dogName}" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy"><div class="p-6"><h3 class="font-bold text-2xl">${s.dogName}</h3><p class="text-slate-500 dark:text-slate-400 text-sm font-bold">adopted by ${s.name}</p><p class="leading-relaxed mt-2">${s.story}</p></div></div>`).join('');
+             if (galleryGrid) galleryGrid.innerHTML = stories.map(s => `<a href="#" class="gallery-item group block relative overflow-hidden rounded-lg shadow-md"><img src="${s.img}" alt="Gallery image of a rescued dog" class="w-full h-full object-cover aspect-square group-hover:scale-110 transition-transform duration-300" loading="lazy"><div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all flex items-center justify-center"><i class="fa-solid fa-magnifying-glass h-12 w-12 text-white opacity-0 group-hover:opacity-100 transition-opacity"></i></div></a>`).join('');
+        }
+
+        function showDogProfileModal(dogId) {
+            const dog = allDogs.find(d => d.id === dogId);
+            if (!dog) return;
+
+            let actionButtonHtml = '';
+            let adoptedBannerHtml = '';
+
+            // Improved "Adopted" banner and profile actions
+            if (dog.status === 'Available') {
+                actionButtonHtml = `<button class="adoption-request-btn w-full mt-8 btn btn-primary py-3 text-lg" data-dog-id="${dog.id}" data-dog-name="${dog.name}">Start Adoption Process</button>`;
+            } else if (dog.status === 'Pending') {
+                actionButtonHtml = `<button class="w-full mt-8 btn btn-primary py-3 text-lg" disabled>Adoption Pending</button>`;
+            } else if (dog.status === 'Adopted') {
+                adoptedBannerHtml = `<div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-500 text-white font-bold uppercase px-6 py-2 rounded-full shadow-lg text-sm tracking-widest">
+                    <i class="fa-solid fa-house-heart mr-2"></i>Adopted
+                </div>`;
+                 if (currentUser && currentUser.uid === dog.adopterId) {
+                       actionButtonHtml = `<p class="mt-8 text-center font-bold text-lg bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 p-3 rounded-lg"><i class="fa-solid fa-check-circle mr-2"></i>You are the proud adopter!</p>`;
+                 } else {
+                       actionButtonHtml = `<button class="assist-request-btn w-full mt-8 btn btn-secondary py-3 text-lg" data-dog-id="${dog.id}" data-dog-name="${dog.name}">Assist Adopter</button>`;
+                 }
+            }
+
+            // Improved temperament display with icons
+            const temperamentMap = {
+                "Friendly": "fa-solid fa-face-smile",
+                "Playful": "fa-solid fa-volleyball",
+                "Calm": "fa-solid fa-couch",
+                "Loyal": "fa-solid fa-shield-heart",
+                "Energetic": "fa-solid fa-bolt",
+                "Affectionate": "fa-solid fa-heart",
+                "Shy": "fa-solid fa-user-ninja",
+                "Curious": "fa-solid fa-magnifying-glass",
+                "Intelligent": "fa-solid fa-brain",
+                "Brave": "fa-solid fa-shield-halved"
+            };
+
+            const temperamentHtml = (dog.temperament || []).map(t => {
+                const iconClass = temperamentMap[t] || "fa-solid fa-paw";
+                return `<div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700 rounded-lg px-3 py-2">
+                            <i class="${iconClass} text-orange-500 w-5 text-center"></i>
+                            <span class="font-semibold text-sm text-slate-700 dark:text-slate-300">${t}</span>
+                        </div>`;
+            }).join('');
+
+
+            dogProfileModalContent.innerHTML = `
+                <div class="grid md:grid-cols-2 gap-0 relative">
+                    ${adoptedBannerHtml}
+                    <img src="${dog.img}" alt="${dog.name}" class="w-full h-80 object-cover rounded-t-2xl md:rounded-l-2xl md:rounded-t-none md:h-full md:aspect-auto aspect-square" loading="lazy">
+                    <div class="p-8 relative bg-white dark:bg-slate-800 rounded-b-2xl md:rounded-r-2xl md:rounded-b-none">
+                        <button id="close-dog-modal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-3xl">&times;</button>
+                        <h2 class="text-4xl font-extrabold mb-2">${dog.name}</h2>
+                        <p class="text-md text-slate-500 dark:text-slate-400 mb-6">${dog.breed}</p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300 px-3 py-1 rounded-full text-sm font-bold">${dog.age}</span>
+                            <span class="bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-bold">${dog.gender}</span>
+                            <span class="bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300 px-3 py-1 rounded-full text-sm font-bold">${dog.size}</span>
+                        </div>
+                        <h4 class="font-bold mt-6 mb-2">About ${dog.name}:</h4>
+                        <p class="leading-relaxed mb-6">${dog.bio}</p>
+                        <h4 class="font-bold mt-6 mb-2">Temperament:</h4>
+                        <div class="grid grid-cols-2 gap-3">${temperamentHtml}</div>
+                        ${actionButtonHtml}
+                    </div>
+                </div>`;
+            
+            appContainer.setAttribute('aria-hidden', 'true');
+
+            dogProfileModal.classList.remove('hidden');
+            dogProfileModal.classList.add('flex');
+            setTimeout(() => {
+                dogProfileModalContent.classList.remove('scale-95', 'opacity-0');
+                dogProfileModalContent.querySelector('#close-dog-modal')?.focus();
+            }, 10);
+        }
+
+        function closeDogProfileModal() {
+            appContainer.removeAttribute('aria-hidden');
+            dogProfileModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                dogProfileModal.classList.add('hidden');
+                dogProfileModal.classList.remove('flex');
+            }, 300);
+        }
+        
+        // --- App Logic ---
+        function switchPage(pageId) {
+             pageViews.forEach(view => view.classList.toggle('active', view.id === `${pageId}-view`));
+             allNavLinks.forEach(link => link.classList.toggle('active', link.dataset.page === pageId));
+             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function getAgeInYears(ageString) {
+             if (!ageString) return 0;
+             const lowerCaseAge = ageString.toLowerCase();
+             const numValue = parseInt(lowerCaseAge, 10);
+             if (isNaN(numValue)) return 0;
+             if (lowerCaseAge.includes('month')) return numValue / 12;
+             return numValue;
+        }
+
+        function applyFilters() {
+             clearTimeout(filterTimeout);
+             adoptionGrid.innerHTML = '';
+             for (let i = 0; i < 8; i++) {
+                 adoptionGrid.appendChild(createSkeletonCard());
+             }
+
+             filterTimeout = setTimeout(() => {
+                 const ageFilter = document.getElementById('filter-age').value;
+                 const size = document.getElementById('filter-size').value;
+                 const gender = document.getElementById('filter-gender').value;
+                 const searchTerm = document.getElementById('filter-search').value.toLowerCase();
+                
+                 const filteredDogs = allDogs.filter(dog => {
+                     const ageInYears = getAgeInYears(dog.age);
+                     let ageMatch = false;
+                     switch (ageFilter) {
+                         case 'puppy': ageMatch = ageInYears < 1; break;
+                         case 'adult': ageMatch = ageInYears >= 1 && ageInYears < 8; break;
+                         case 'senior': ageMatch = ageInYears >= 8; break;
+                         default: ageMatch = true;
+                     }
+                    
+                     return ageMatch &&
+                         (size === 'all' || dog.size.toLowerCase() === size) &&
+                         (gender === 'all' || dog.gender.toLowerCase() === gender) &&
+                         (dog.name.toLowerCase().includes(searchTerm) || dog.breed.toLowerCase().includes(searchTerm));
+                 });
+                 renderAdoptionGrid(filteredDogs);
+             }, 500);
+        }
+        
+        function updateDonationProgress(total, count) {
+             const progressBar = document.getElementById('progressBar');
+             if (progressBar) {
+                 const percentage = Math.min(100, (total / GOAL_AMOUNT) * 100); 
+                 progressBar.style.width = `${percentage}%`; 
+             }
+             const collectedAmountEl = document.getElementById('collectedAmount');
+             if(collectedAmountEl) collectedAmountEl.textContent = `$${total.toLocaleString()}`;
+             const goalAmountEl = document.getElementById('goalAmount');
+             if(goalAmountEl) goalAmountEl.textContent = `$${GOAL_AMOUNT.toLocaleString()}`;
+             const donationCountEl = document.getElementById('donation-count');
+             if(donationCountEl) donationCountEl.textContent = `${count} donations`;
+        }
+        
+        function renderDonationAmounts() {
+            const container = document.getElementById('donation-amount-selector');
+            if (!container) return;
+
+            const donationAmounts = [
+                { amount: 25, desc: 'Vaccinations' },
+                { amount: 50, desc: 'Week of Food' },
+                { amount: 100, desc: 'Spay/Neuter' },
+                { amount: 250, desc: 'Emergency Care' },
+                { amount: 500, desc: 'Sponsor a Rescue' },
+                { amount: 1000, desc: 'Miracle Worker' },
+            ];
+
+            container.innerHTML = donationAmounts.map(item => `
+                <div class="amount-option">
+                    <input type="radio" id="amount-${item.amount}" name="donation_amount" value="${item.amount}">
+                    <label for="amount-${item.amount}" class="amount-label">
+                        <span class="amount">$${item.amount}</span>
+                        <span class="description">${item.desc}</span>
+                    </label>
+                </div>
+            `).join('');
+        }
+
+        function updateDonationSummary() {
+            const checkoutBtn = document.getElementById('checkout-btn');
+            if (!checkoutBtn) return;
+            const checkoutBtnSpan = checkoutBtn.querySelector('span');
+            if (!checkoutBtnSpan) return;
+
+            if (selectedAmount > 0) {
+                checkoutBtn.disabled = false;
+                checkoutBtnSpan.textContent = `Donate $${selectedAmount.toFixed(2)}`;
+            } else {
+                checkoutBtn.disabled = true;
+                checkoutBtnSpan.textContent = 'Select an amount';
+            }
+        }
+        
+        async function handleCheckout() {
+            if (!selectedAmount || selectedAmount < 1) { // Min donation is $1.00
+                showToast('Please select or enter an amount of at least $1.00.', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('checkout-btn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Processing...</span>`;
+
+            const donorName = document.getElementById('donorName').value || 'Anonymous';
+            const donorMessage = document.getElementById('donorMessage').value || '';
+            const showPublicly = document.getElementById('showPublicly').checked;
+            const finalPayerName = showPublicly ? donorName : 'Anonymous';
+
+            try {
+                // Replace with your actual Cloud Function URL after deploying it
+                const functionUrl = 'https://us-central1-adeledogrescueus.cloudfunctions.net/createStripeCheckout';
+
+                const response = await fetch(functionUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        amount: selectedAmount,
+                        successUrl: `${window.location.href.split('?')[0].split('#')[0]}?donation_success=true&amount=${selectedAmount}&method=Stripe&payer=${encodeURIComponent(finalPayerName)}&message=${encodeURIComponent(donorMessage)}`,
+                        cancelUrl: `${window.location.href.split('?')[0].split('#')[0]}?donation_cancelled=true`
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Server error, could not create checkout session.');
+                }
+
+                const { sessionId } = await response.json();
+                const { error } = await stripe.redirectToCheckout({ sessionId });
+
+                if (error) {
+                    showToast(error.message, 'error');
+                }
+
+            } catch (error) {
+                console.error("Checkout Error:", error);
+                showToast('Could not redirect to payment page.', 'error');
+            } finally {
+                // Re-enable the button if there was an error before redirecting
+                btn.disabled = false;
+                updateDonationSummary();
+            }
+        }
+
+        async function handleDogDonationCheckout(dogId, dogName, amount) {
+            if (!amount || amount < 1) {
+                showToast('Please enter an amount of at least $1.00.', 'error');
+                return;
+            }
+            
+            const btn = document.querySelector(`.dog-checkout-btn[data-dog-id="${dogId}"]`);
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+            }
+
+            const payerName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Anonymous';
+            
+            try {
+                const functionUrl = 'https://us-central1-adeledogrescueus.cloudfunctions.net/createStripeCheckout';
+
+                const response = await fetch(functionUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        amount: amount,
+                        successUrl: `${window.location.href.split('?')[0].split('#')[0]}?dog_donation_success=true&dogId=${dogId}&dogName=${encodeURIComponent(dogName)}&amount=${amount}&method=Stripe&payer=${encodeURIComponent(payerName)}`,
+                        cancelUrl: `${window.location.href.split('?')[0].split('#')[0]}?donation_cancelled=true#my-adoptions`
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Server error, could not create checkout session.');
+                }
+
+                const { sessionId } = await response.json();
+                const { error } = await stripe.redirectToCheckout({ sessionId });
+
+                if (error) {
+                    showToast(error.message, 'error');
+                }
+
+            } catch (error) {
+                console.error("Dog Donation Checkout Error:", error);
+                showToast('Could not redirect to payment page.', 'error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<span>Donate</span>`;
+                }
+            }
+        }
+
+        async function recordDonation({ amount, payerName, message, method }) {
+            try {
+                const donationsCol = collection(db, `artifacts/${appId}/public/data/donations`);
+                await addDoc(donationsCol, {
+                    amount: amount,
+                    payer: payerName,
+                    message: message || '',
+                    timestamp: serverTimestamp(),
+                    userId: currentUser?.uid || 'anonymous',
+                    userEmail: currentUser?.email || 'anonymous@example.com',
+                    method: method,
+                });
+            } catch (dbError) {
+                console.error("Error recording donation to Firestore: ", dbError);
+                showToast('Your donation was successful, but we failed to record it in our feed.', 'error');
+            }
+        }
+
+        async function recordDogDonation({ dogId, dogName, amount, payerName, method }) {
+            try {
+                // Record in the dog's specific sub-collection
+                const dogDonationsCol = collection(db, `artifacts/${appId}/public/data/dogs/${dogId}/donations`);
+                await addDoc(dogDonationsCol, {
+                    amount: amount,
+                    payer: payerName,
+                    timestamp: serverTimestamp(),
+                    userId: currentUser?.uid || 'anonymous',
+                    method: method,
+                });
+
+                // Also record in the main public feed for community visibility
+                await recordDonation({
+                    amount: amount,
+                    payerName: `${payerName} (for ${dogName})`, // Add context to the main feed
+                    method: method,
+                    message: `for ${dogName}'s care fund`,
+                });
+
+            } catch (dbError) {
+                console.error("Error recording dog-specific donation: ", dbError);
+                showToast('Your donation was successful, but we failed to record it.', 'error');
+            }
+        }
+        
+        function setupScrollAnimations() {
+             const observer = new IntersectionObserver((entries) => {
+                 entries.forEach(entry => {
+                     if (entry.isIntersecting) entry.target.classList.add('visible');
+                 });
+             }, { threshold: 0.1 });
+             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+        
+        function setupHeaderScroll() {
+             const header = document.getElementById('main-header');
+             if (!header) return;
+             window.addEventListener('scroll', () => {
+                 header.classList.toggle('scrolled', window.scrollY > 10);
+             });
+        }
+
+        function setupDarkMode() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const lightIcon = document.getElementById('theme-icon-light');
+            const darkIcon = document.getElementById('theme-icon-dark');
+            
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                if(lightIcon) lightIcon.classList.add('hidden');
+                if(darkIcon) darkIcon.classList.remove('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                if(lightIcon) lightIcon.classList.remove('hidden');
+                if(darkIcon) darkIcon.classList.add('hidden');
+            }
+
+            themeToggle?.addEventListener('click', () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.theme = 'light';
+                    document.documentElement.classList.remove('dark');
+                    lightIcon.classList.remove('hidden');
+                    darkIcon.classList.add('hidden');
+                } else {
+                    localStorage.theme = 'dark';
+                    document.documentElement.classList.add('dark');
+                    lightIcon.classList.add('hidden');
+                    darkIcon.classList.remove('hidden');
+                }
+            });
+        }
+        
+        // --- Event Listeners Setup ---
+        function setupEventListeners() {
+            allNavLinks.forEach(link => link.addEventListener('click', e => {
+                e.preventDefault();
+                switchPage(e.currentTarget.dataset.page);
+            }));
+            
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userMenuDropdown = document.getElementById('user-menu-dropdown');
+            userMenuButton?.addEventListener('click', () => {
+                const isHidden = userMenuDropdown.classList.contains('hidden');
+                if (isHidden) {
+                    userMenuDropdown.classList.remove('hidden');
+                    setTimeout(() => {
+                        userMenuDropdown.classList.remove('scale-95', 'opacity-0');
+                    }, 10);
+                } else {
+                    userMenuDropdown.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => userMenuDropdown.classList.add('hidden'), 200);
+                }
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (userMenuButton && userMenuDropdown && !userMenuButton.contains(e.target) && !userMenuDropdown.contains(e.target) && !userMenuDropdown.classList.contains('hidden')) {
+                    userMenuDropdown.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => userMenuDropdown.classList.add('hidden'), 200);
+                }
+            });
+
+            // CHANGE 5: UPDATE AUTH ACTION BUTTON LISTENER
+            document.getElementById('auth-action-btn')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                const authActionButton = document.getElementById('auth-action-btn');
+                if (authActionButton.textContent === 'Log Out') {
+                    signOut(auth);
+                } else {
+                    showLoginPage(); // Show the login page when "Log In" is clicked
+                }
+            });
+
+            document.body.addEventListener('click', async e => {
+                const adoptBtn = e.target.closest('.adopt-me-btn');
+                const closeBtn = e.target.closest('#close-dog-modal');
+                const galleryItem = e.target.closest('.gallery-item');
+                const adoptionRequestBtn = e.target.closest('.adoption-request-btn');
+                const assistRequestBtn = e.target.closest('.assist-request-btn');
+                const approveAssistBtn = e.target.closest('.approve-assist-btn');
+                const denyAssistBtn = e.target.closest('.deny-assist-btn');
+                const favoriteBtn = e.target.closest('.favorite-btn');
+                const adoptionTabBtn = e.target.closest('.adoption-tab-btn');
+                const dogCheckoutBtn = e.target.closest('.dog-checkout-btn');
+
+                if (adoptBtn) showDogProfileModal(adoptBtn.dataset.dogId);
+                if (closeBtn) closeDogProfileModal();
+                if (galleryItem) {
+                    e.preventDefault();
+                    const modal = document.getElementById('gallery-modal');
+                    document.getElementById('gallery-modal-image').src = galleryItem.querySelector('img').src;
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                }
+                if (dogCheckoutBtn) {
+                    const { dogId, dogName } = dogCheckoutBtn.dataset;
+                    const amountInput = document.getElementById(`custom-donation-${dogId}`);
+                    const amount = parseFloat(amountInput.value);
+                    await handleDogDonationCheckout(dogId, dogName, amount);
+                }
+                if (adoptionRequestBtn) {
+                    // CHANGE 6: GUARD THIS ACTION
+                    if (!currentUser || currentUser.isAnonymous) {
+                        showLoginPage('Please sign in to start the adoption process.');
+                        return;
+                    }
+                    const btn = adoptionRequestBtn;
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+                    
+                    try {
+                        const dogId = btn.dataset.dogId;
+                        const batch = writeBatch(db);
+                        const applicationsCol = collection(db, `artifacts/${appId}/public/data/applications`);
+                        const newAppRef = doc(applicationsCol);
+                        batch.set(newAppRef, {
+                            dogId: dogId,
+                            dogName: btn.dataset.dogName,
+                            userId: currentUser.uid,
+                            userEmail: currentUser.email,
+                            status: 'Pending',
+                            submittedAt: serverTimestamp()
+                        });
+                        const dogRef = doc(db, `artifacts/${appId}/public/data/dogs`, dogId);
+                        batch.update(dogRef, { status: 'Pending' });
+
+                        await batch.commit();
+
+                        setTimeout(() => {
+                            closeDogProfileModal();
+                            showToast('Your adoption request has been sent!', 'success');
+                        }, 1500);
+                    } catch (error) {
+                        console.error("Error submitting application: ", error);
+                        showToast('There was an error submitting your request.', 'error');
+                        btn.disabled = false;
+                        btn.textContent = 'Start Adoption Process';
+                    }
+                }
+                if (assistRequestBtn) {
+                    // CHANGE 7: GUARD THIS ACTION
+                     if (!currentUser || currentUser.isAnonymous) {
+                         showLoginPage('Please sign in to request to assist.');
+                         return;
+                     }
+                    
+                    const dogId = assistRequestBtn.dataset.dogId;
+                    const dog = allDogs.find(d => d.id === dogId);
+
+                    if (!dog || dog.status !== 'Adopted') {
+                        showToast('You can only assist adopters of adopted dogs.', 'error');
+                        return;
+                    }
+                    if (dog.adopterId === currentUser.uid) {
+                        showToast('You cannot assist a dog you have already adopted.', 'error');
+                        return;
+                    }
+
+                    const btn = assistRequestBtn;
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending Request...';
+
+                    try {
+                        const assistReqCol = collection(db, `artifacts/${appId}/public/data/dogs/${dogId}/assistantRequests`);
+                        await addDoc(assistReqCol, {
+                            userId: currentUser.uid,
+                            userEmail: currentUser.email,
+                            userName: currentUser.displayName || currentUser.email.split('@')[0],
+                            status: 'pending',
+                            requestedAt: serverTimestamp()
+                        });
+                        setTimeout(() => {
+                            closeDogProfileModal();
+                            showToast('Your request to assist has been sent!', 'success');
+                        }, 1500);
+                    } catch (error) {
+                        console.error("Error sending assist request: ", error);
+                        showToast('Could not send your request. Check permissions and try again.', 'error');
+                        btn.disabled = false;
+                        btn.textContent = 'Assist Adopter';
+                    }
+                }
+                if (approveAssistBtn) {
+                    const { dogId, requestId, userId, userEmail } = approveAssistBtn.dataset;
+                    const batch = writeBatch(db);
+                    const requestRef = doc(db, `artifacts/${appId}/public/data/dogs/${dogId}/assistantRequests`, requestId);
+                    batch.update(requestRef, { status: 'approved' });
+                    const dogRef = doc(db, `artifacts/${appId}/public/data/dogs`, dogId);
+                    batch.update(dogRef, {
+                        assistants: arrayUnion({ id: userId, email: userEmail }),
+                        assistantIds: arrayUnion(userId) // Add UID to queryable array
+                    });
+                    
+                    await batch.commit();
+                    showToast("Assistant approved!", "success");
+                }
+                if (denyAssistBtn) {
+                    const { dogId, requestId } = denyAssistBtn.dataset;
+                    const requestRef = doc(db, `artifacts/${appId}/public/data/dogs/${dogId}/assistantRequests`, requestId);
+                    await deleteDoc(requestRef);
+                    showToast("Request denied.", "success");
+                }
+                if (favoriteBtn) {
+                    // CHANGE 8: GUARD THIS ACTION
+                    if (!currentUser || currentUser.isAnonymous) {
+                        showLoginPage('Please sign in to save your favorite dogs.');
+                        return; // Stop the function here
+                    }
+                    const dogId = favoriteBtn.dataset.dogId;
+                    const favRef = doc(db, `artifacts/${appId}/users/${currentUser.uid}/favorites`, dogId);
+                    
+                    try {
+                        if (userFavorites.has(dogId)) {
+                            await deleteDoc(favRef);
+                            showToast('Removed from favorites.', 'success');
+                        } else {
+                            await setDoc(favRef, { favoritedAt: serverTimestamp() });
+                            showToast('Added to favorites!', 'success');
+                        }
+                    } catch (error) {
+                        console.error("Error updating favorites:", error);
+                        showToast('Could not update favorites.', 'error');
+                    }
+                }
+                if (adoptionTabBtn) {
+                    const { tab } = adoptionTabBtn.dataset;
+                    const parent = adoptionTabBtn.closest('.adoption-card');
+                    parent.querySelectorAll('.adoption-tab-btn').forEach(btn => btn.classList.remove('active'));
+                    adoptionTabBtn.classList.add('active');
+                    parent.querySelectorAll('.adoption-tab-content').forEach(content => {
+                        content.classList.toggle('active', content.dataset.tabContent === tab);
+                    });
+                }
+            });
+
+            dogProfileModal.addEventListener('click', e => { if (e.target === dogProfileModal) closeDogProfileModal(); });
+            const galleryModal = document.getElementById('gallery-modal');
+            galleryModal.addEventListener('click', e => { if (e.target === galleryModal || e.target.closest('#gallery-modal-close')) { galleryModal.classList.add('hidden'); galleryModal.classList.remove('flex'); } });
+
+            document.querySelectorAll('#filter-age, #filter-size, #filter-gender, #filter-search').forEach(el => el.addEventListener('input', applyFilters));
+
+            const storyForm = document.getElementById('story-form');
+            if (storyForm) {
+                document.getElementById('story-image').addEventListener('change', (e) => {
+                    const fileName = e.target.files[0] ? e.target.files[0].name : 'Upload a photo';
+                    document.getElementById('file-name-span').textContent = fileName;
+                });
+
+                storyForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    // CHANGE 9: GUARD THIS ACTION
+                    if (!currentUser || currentUser.isAnonymous) {
+                        showLoginPage('Please sign in to submit a story.');
+                        return;
+                    }
+                    
+                    const submitBtn = storyForm.querySelector('button[type="submit"]');
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+                    const formData = new FormData(storyForm);
+                    const imageFile = formData.get('image');
+                    
+                    try {
+                        const storageRef = ref(storage, `stories/${currentUser.uid}/${Date.now()}_${imageFile.name}`);
+                        const snapshot = await uploadBytes(storageRef, imageFile);
+                        const imageUrl = await getDownloadURL(snapshot.ref);
+
+                        const storiesCol = collection(db, `artifacts/${appId}/public/data/stories`);
+                        await addDoc(storiesCol, {
+                            name: formData.get('name'),
+                            dogName: formData.get('dogName'),
+                            story: formData.get('story'),
+                            img: imageUrl,
+                            status: 'pending',
+                            createdAt: serverTimestamp(),
+                            userId: currentUser.uid,
+                            userEmail: currentUser.email,
+                        });
+
+                        showToast('Thank you! Your story is pending approval.', 'success');
+                        storyForm.reset();
+                        document.getElementById('file-name-span').textContent = 'Upload a photo';
+                        document.getElementById('story-form-container').classList.add('hidden');
+                    } catch(err) {
+                        showToast('Error submitting story.', 'error');
+                        console.error(err);
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Submit My Story';
+                    }
+                });
+            }
+
+            document.getElementById('suggestion-form')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                // CHANGE 10: GUARD THIS ACTION
+                 if (!currentUser || currentUser.isAnonymous) {
+                     showLoginPage('Please sign in to submit a suggestion.');
+                     return;
+                 }
+                const formData = new FormData(e.target);
+                const suggestionsCol = collection(db, `artifacts/${appId}/public/data/suggestions`);
+                try {
+                    await addDoc(suggestionsCol, {
+                        suggestion: formData.get('suggestion'),
+                        createdAt: serverTimestamp(),
+                        userId: currentUser.uid,
+                        userEmail: currentUser.email,
+                        userName: currentUser.displayName || currentUser.email.split('@')[0]
+                    });
+                    showToast('Thank you for your suggestion!', 'success');
+                    e.target.reset();
+                } catch (err) {
+                    showToast('Error submitting suggestion.', 'error');
+                    console.error(err);
+                }
+            });
+
+            document.getElementById('show-story-form')?.addEventListener('click', () => {
+                document.getElementById('story-form-container').classList.toggle('hidden');
+            });
+            
+            const shareButton = document.getElementById('share-button');
+            if (shareButton) {
+                shareButton.addEventListener('click', async () => {
+                    const shareData = {
+                        title: 'Adele Rescue',
+                        text: 'Help give paws a second chance! Support Adele Rescue.',
+                        url: window.location.href
+                    }
+                    try {
+                        if (navigator.share) {
+                            await navigator.share(shareData);
+                        } else {
+                            navigator.clipboard.writeText(shareData.url);
+                            showToast('Link copied to clipboard!');
+                        }
+                    } catch(err) {
+                        showToast('Could not share.', 'error');
+                    }
+                });
+            }
+            
+            const donationContainer = document.getElementById('donation-container');
+            if (donationContainer) {
+                const customAmountInput = document.getElementById('customAmount');
+                
+                donationContainer.addEventListener('change', (e) => {
+                    if (e.target.name === 'donation_amount') {
+                        selectedAmount = parseFloat(e.target.value);
+                        customAmountInput.value = ''; // Clear custom amount when preset is chosen
+                        updateDonationSummary();
+                    }
+                });
+
+                customAmountInput?.addEventListener('input', () => {
+                    const amount = parseFloat(customAmountInput.value);
+                    selectedAmount = isNaN(amount) ? 0 : amount;
+                    
+                    // Deselect all radio buttons
+                    const checkedRadio = document.querySelector('input[name="donation_amount"]:checked');
+                    if (checkedRadio) {
+                        checkedRadio.checked = false;
+                    }
+                    
+                    updateDonationSummary();
+                });
+            }
+
+            document.getElementById('checkout-btn')?.addEventListener('click', handleCheckout);
+        }
+        
+        // --- Leaderboard & Donation Feed Rendering ---
+        function renderLeaderboard(donations) {
+            const container = document.getElementById('leaderboard-container');
+            if (!container) return;
+
+            const donorTotals = {};
+            donations.forEach(donation => {
+                const payer = donation.payer || 'Anonymous';
+                donorTotals[payer] = (donorTotals[payer] || 0) + donation.amount;
+            });
+
+            const sortedDonors = Object.entries(donorTotals)
+                .sort(([, a], [, b]) => b - a)
+                .slice(0, 5); 
+
+            if (sortedDonors.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500 dark:text-slate-400 py-4">Be the first to donate and get on the leaderboard!</p>`;
+                return;
+            }
+
+            const [first, second, third, ...others] = sortedDonors;
+
+            const podiumHtml = `
+                <div class="flex justify-center items-end gap-2 sm:gap-4 mb-6">
+                    ${second ? `
+                    <div class="podium-item order-2 text-center w-1/3" style="animation-delay: 100ms">
+                        <div class="p-4 bg-slate-200 dark:bg-slate-700 rounded-t-xl">
+                            <i class="fa-solid fa-medal text-4xl text-slate-400"></i>
+                            <p class="font-bold text-lg mt-2 truncate">${second[0]}</p>
+                            <p class="font-black text-xl text-slate-500 dark:text-slate-300">$${Math.round(second[1]).toLocaleString()}</p>
+                        </div>
+                    </div>` : ''}
+                    ${first ? `
+                    <div class="podium-item order-1 text-center w-1/3">
+                        <div class="p-6 bg-amber-400 dark:bg-amber-500 text-white rounded-t-2xl shadow-lg">
+                            <i class="fa-solid fa-crown text-5xl text-white"></i>
+                            <p class="font-extrabold text-2xl mt-2 truncate">${first[0]}</p>
+                            <p class="font-black text-3xl opacity-90">$${Math.round(first[1]).toLocaleString()}</p>
+                        </div>
+                    </div>` : ''}
+                    ${third ? `
+                    <div class="podium-item order-3 text-center w-1/3" style="animation-delay: 200ms">
+                        <div class="p-4 bg-yellow-600/50 dark:bg-yellow-700/50 rounded-t-xl">
+                            <i class="fa-solid fa-award text-4xl text-yellow-700 dark:text-yellow-500"></i>
+                            <p class="font-bold text-lg mt-2 truncate">${third[0]}</p>
+                            <p class="font-black text-xl text-yellow-800 dark:text-yellow-400">$${Math.round(third[1]).toLocaleString()}</p>
+                        </div>
+                    </div>` : ''}
+                </div>`;
+            
+            const othersHtml = others.length > 0 ? `
+                <ul class="space-y-3 mt-8">
+                    ${others.map(([name, amount], index) => `
+                        <li class="leaderboard-item flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50" style="animation-delay: ${ (index + 3) * 100}ms">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-lg font-bold text-slate-500">
+                                ${index + 4}
+                            </div>
+                            <div class="flex-grow font-bold text-slate-800 dark:text-slate-200 truncate">${name}</div>
+                            <div class="font-black text-lg text-teal-500">$${Math.round(amount).toLocaleString()}</div>
+                        </li>
+                    `).join('')}
+                </ul>` : '';
+
+            container.innerHTML = podiumHtml + othersHtml;
+        }
+
+        // --- Firestore Listeners Setup ---
+        function setupFirestoreListeners() {
+            if (!db) return;
+
+            const dogsCol = collection(db, `artifacts/${appId}/public/data/dogs`);
+            onSnapshot(query(dogsCol, orderBy("name")), (snapshot) => {
+                allDogs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderAdoptionGrid();
+                renderFavoritesGrid();
+                renderMyAdoptions(Array.from(myManagedDogs.values()));
+                const dogOfTheWeek = allDogs.find(d => d.dogOfTheWeek);
+                if(dogOfTheWeek) renderDogOfTheWeek(dogOfTheWeek);
+            }, err => console.error("Error getting dogs: ", err));
+            
+            const storiesCol = collection(db, `artifacts/${appId}/public/data/stories`);
+            onSnapshot(query(storiesCol, where("status", "==", "approved"), orderBy("createdAt", "desc")), (snapshot) => {
+                const stories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderStoriesAndGallery(stories);
+            }, err => console.error("Error getting stories: ", err));
+            
+            const donationsCol = collection(db, `artifacts/${appId}/public/data/donations`);
+            onSnapshot(query(donationsCol), (snapshot) => {
+                let total = 0;
+                const allDonations = [];
+                snapshot.forEach(doc => { 
+                    const data = doc.data();
+                    total += data.amount; 
+                    allDonations.push(data);
+                });
+                updateDonationProgress(total, snapshot.size);
+                renderLeaderboard(allDonations);
+            }, err => console.error("Error getting total donations: ", err));
+
+            const recentDonationsQuery = query(donationsCol, orderBy("timestamp", "desc"), limit(10));
+            onSnapshot(recentDonationsQuery, (snapshot) => {
+                const feedEl = document.getElementById('community-donations-feed');
+                if (!feedEl) return;
+                feedEl.innerHTML = '';
+                if(snapshot.empty) {
+                     feedEl.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-center py-4">No donations yet. Be the first!</p>';
+                     return;
+                }
+                snapshot.forEach((doc, index) => {
+                    const donation = doc.data();
+                    const el = document.createElement('div');
+                    el.className = 'donation-feed-item bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm flex items-center gap-4';
+                    el.style.animationDelay = `${index * 100}ms`;
+
+                    const payerName = donation.payer || 'Anonymous';
+                    const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(payerName)}&background=random&color=fff&bold=true`;
+                    
+                    const methodIcon = donation.method === 'Stripe' 
+                        ? '<i class="fa-brands fa-cc-stripe text-indigo-500"></i>' 
+                        : '<i class="fa-brands fa-paypal text-blue-500"></i>';
+
+                    el.innerHTML = `
+                        <div class="flex-shrink-0">
+                            <img class="w-12 h-12 rounded-full object-cover" src="${avatarUrl}" alt="${payerName}">
+                        </div>
+                        <div class="flex-grow">
+                            <p class="font-semibold text-slate-800 dark:text-slate-200">
+                                <span class="font-bold">${payerName}</span> just donated!
+                            </p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                                ${methodIcon}
+                                <span>${timeAgo(donation.timestamp)}</span>
+                            </p>
+                        </div>
+                        <div class="font-black text-xl text-green-500">
+                            $${donation.amount.toLocaleString()}
+                        </div>
+                    `;
+                    feedEl.appendChild(el);
+                });
+            }, err => console.error("Error getting recent donations: ", err));
+        }
+
+        function setupUserSpecificListeners(user) {
+            // Clean up previous listeners
+            if (myAdoptionsUnsubscribe) myAdoptionsUnsubscribe();
+            if (myAssistedUnsubscribe) myAssistedUnsubscribe();
+            if (favoritesUnsubscribe) favoritesUnsubscribe();
+            Object.values(dogDonationUnsubscribes).forEach(unsub => unsub());
+
+            myManagedDogs.clear(); // Clear the managed dogs map
+
+            const updateMyManagedDogs = () => {
+                renderMyAdoptions(Array.from(myManagedDogs.values()));
+            }
+
+            if (user && !user.isAnonymous) {
+                 // Listener for dogs they adopted
+                 const myAdoptionsQuery = query(collection(db, `artifacts/${appId}/public/data/dogs`), where("adopterId", "==", user.uid));
+                 myAdoptionsUnsubscribe = onSnapshot(myAdoptionsQuery, snapshot => {
+                     snapshot.docs.forEach(doc => myManagedDogs.set(doc.id, { id: doc.id, ...doc.data() }));
+                     updateMyManagedDogs();
+                 }, err => console.error("Error fetching adoptions:", err));
+
+                // Listener for dogs they assist
+                 const myAssistedQuery = query(collection(db, `artifacts/${appId}/public/data/dogs`), where("assistantIds", "array-contains", user.uid));
+                 myAssistedUnsubscribe = onSnapshot(myAssistedQuery, snapshot => {
+                     snapshot.docs.forEach(doc => myManagedDogs.set(doc.id, { id: doc.id, ...doc.data() }));
+                     updateMyManagedDogs();
+                 }, err => console.error("Error fetching assisted dogs:", err));
+
+                 // Listener for favorites
+                 const favoritesCol = collection(db, `artifacts/${appId}/users/${user.uid}/favorites`);
+                 favoritesUnsubscribe = onSnapshot(favoritesCol, snapshot => {
+                     userFavorites.clear();
+                     snapshot.forEach(doc => userFavorites.add(doc.id));
+                     renderAdoptionGrid(); 
+                     renderFavoritesGrid();
+                 }, err => console.error("Error fetching favorites:", err));
+
+            } else {
+                userFavorites.clear();
+                renderMyAdoptions([]);
+                renderAdoptionGrid();
+                renderFavoritesGrid();
+            }
+        }
+        
+        function renderMyAdoptions(dogs) {
+            const grid = document.getElementById('my-adoptions-grid');
+            if (!grid) return;
+            if (!dogs.length) {
+                grid.innerHTML = `<div class="text-center col-span-full"><p class="text-slate-500 dark:text-slate-400">You haven't adopted or been added as an assistant for any dogs yet. <a href="#adopt" data-page="adopt" class="nav-link text-orange-500 font-bold hover:underline">Find a friend today!</a></p></div>`;
+                return;
+            }
+
+            grid.innerHTML = '';
+            dogs.forEach(dog => {
+                const dogFundingGoal = dog.fundingGoal || 500; // Default goal
+                const card = document.createElement('div');
+                card.className = 'adoption-card bg-white dark:bg-slate-800 rounded-2xl shadow-lg';
+                card.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-6">
+                        <div class="md:col-span-1">
+                            <img src="${dog.img}" class="w-full h-64 md:h-full object-cover rounded-t-2xl md:rounded-l-2xl md:rounded-t-none" alt="${dog.name}">
+                        </div>
+                        <div class="md:col-span-2 p-6">
+                            <h2 class="text-3xl font-bold mb-4">${dog.name}</h2>
+                            <div class="border-b border-slate-200 dark:border-slate-700 mb-4">
+                                <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                                    <button data-tab="info" class="adoption-tab-btn active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Info</button>
+                                    <button data-tab="gallery" class="adoption-tab-btn whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Gallery</button>
+                                    <button data-tab="funding" class="adoption-tab-btn whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Funding</button>
+                                    <button data-tab="assistants" class="adoption-tab-btn whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Assistants</button>
+                                </nav>
+                            </div>
+                            <div class="mt-4">
+                                <div data-tab-content="info" class="adoption-tab-content active space-y-2 text-sm">
+                                    <p><strong>Breed:</strong> ${dog.breed}</p>
+                                    <p><strong>Age:</strong> ${dog.age}</p>
+                                    <p><strong>Bio:</strong> ${dog.bio}</p>
+                                </div>
+                                <div data-tab-content="gallery" class="adoption-tab-content">
+                                     <p class="text-sm text-slate-500">Gallery coming soon!</p>
+                                </div>
+                                <div data-tab-content="funding" class="adoption-tab-content">
+                                    <p class="mb-2 font-semibold text-slate-700 dark:text-slate-300">Help support ${dog.name}'s ongoing care!</p>
+                                    <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 mb-1">
+                                        <div id="funding-bar-${dog.id}" class="bg-teal-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                    <p id="funding-text-${dog.id}" class="text-xs text-slate-500 dark:text-slate-400 mb-4">$0 of $${dogFundingGoal.toLocaleString()} raised</p>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
+                                        <div>
+                                            <label for="custom-donation-${dog.id}" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Enter amount</label>
+                                            <div class="relative">
+                                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">$</div>
+                                                <input type="number" id="custom-donation-${dog.id}" class="w-full p-3 pl-7 font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 border-transparent focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="25.00" min="1.00" step="0.01">
+                                            </div>
+                                        </div>
+                                        <button class="dog-checkout-btn w-full btn btn-primary py-3" data-dog-id="${dog.id}" data-dog-name="${dog.name}">
+                                            <span>Donate</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div data-tab-content="assistants" class="adoption-tab-content space-y-4">
+                                    <div>
+                                        <h3 class="font-bold text-lg mb-2">Adoption Assistants</h3>
+                                        <div id="assistants-list-${dog.id}"><p class="text-sm text-slate-500">None yet.</p></div>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-lg mb-2">Pending Assistant Requests</h3>
+                                        <div id="assistant-requests-${dog.id}"><p class="text-sm text-slate-500">No new requests.</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                grid.appendChild(card);
+                
+                if(dogDonationUnsubscribes[dog.id]) dogDonationUnsubscribes[dog.id]();
+                const donationsCol = collection(db, `artifacts/${appId}/public/data/dogs/${dog.id}/donations`);
+                dogDonationUnsubscribes[dog.id] = onSnapshot(donationsCol, (snapshot) => {
+                    let total = 0;
+                    snapshot.forEach(doc => total += doc.data().amount);
+                    const percentage = Math.min(100, (total / dogFundingGoal) * 100);
+                    const fundingBar = document.getElementById(`funding-bar-${dog.id}`);
+                    const fundingText = document.getElementById(`funding-text-${dog.id}`);
+                    if(fundingBar) fundingBar.style.width = `${percentage}%`;
+                    if(fundingText) fundingText.textContent = `$${total.toLocaleString()} of $${dogFundingGoal.toLocaleString()} raised`;
+                }, err => {
+                    console.error(`Error fetching donations for dog ${dog.id}:`, err);
+                });
+                
+                const requestsCol = collection(db, `artifacts/${appId}/public/data/dogs/${dog.id}/assistantRequests`);
+                onSnapshot(query(requestsCol, where("status", "==", "pending")), (snapshot) => {
+                    const requestsContainer = document.getElementById(`assistant-requests-${dog.id}`);
+                    if (!requestsContainer) return;
+                    if(snapshot.empty) {
+                        requestsContainer.innerHTML = `<p class="text-sm text-slate-500">No new requests.</p>`;
+                        return;
+                    }
+                    requestsContainer.innerHTML = '<div class="space-y-2">' + snapshot.docs.map(doc => {
+                        const request = doc.data();
+                        return `<div class="flex justify-between items-center bg-slate-100 dark:bg-slate-700 p-2 rounded-md">
+                            <span class="text-sm font-semibold">${request.userName}</span>
+                            <div>
+                                <button class="approve-assist-btn h-8 w-8 rounded-md bg-green-100 text-green-600 hover:bg-green-200" data-dog-id="${dog.id}" data-request-id="${doc.id}" data-user-id="${request.userId}" data-user-email="${request.userEmail}"><i class="fa-solid fa-check"></i></button>
+                                <button class="deny-assist-btn h-8 w-8 rounded-md bg-red-100 text-red-600 hover:bg-red-200" data-dog-id="${dog.id}" data-request-id="${doc.id}"><i class="fa-solid fa-times"></i></button>
+                            </div>
+                        </div>`;
+                    }).join('') + '</div>';
+                });
+                
+                const assistantsContainer = document.getElementById(`assistants-list-${dog.id}`);
+                if (assistantsContainer) {
+                    if (dog.assistants && dog.assistants.length > 0) {
+                        assistantsContainer.innerHTML = '<div class="flex flex-wrap gap-2">' + dog.assistants.map(assistant => `<span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">${assistant.email}</span>`).join('') + '</div>';
+                    } else {
+                         assistantsContainer.innerHTML = `<p class="text-sm text-slate-500">None yet.</p>`;
+                    }
+                }
+            });
+        }
+
+        // --- App Initialization ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            storage = getStorage(app);
+
+            stripe = Stripe(stripeKey);
+
+            // CHANGE 4: REVISED onAuthStateChanged LOGIC
+            onAuthStateChanged(auth, user => {
+                currentUser = user;
+                setupUserSpecificListeners(user);
+                
+                const loginPage = document.getElementById('login-page');
+                const userAvatar = document.getElementById('user-avatar');
+                const userIconPlaceholder = document.getElementById('user-icon-placeholder');
+                const authActionButton = document.getElementById('auth-action-btn');
+                const privateLinks = document.querySelectorAll('[data-page="my-adoptions"]');
+
+                if (user && !user.isAnonymous) {
+                    // A real user is logged in, so hide the login page
+                    loginPage.classList.add('fade-out');
+                    setTimeout(() => loginPage.classList.add('hidden'), 500);
+
+                    userAvatar.src = user.photoURL || `https://ui-avatars.com/api/?name=${user.email || 'User'}&background=f97316&color=fff&bold=true`;
+                    userAvatar.classList.remove('hidden');
+                    userIconPlaceholder.classList.add('hidden');
+                    authActionButton.textContent = 'Log Out';
+                    authActionButton.classList.add('text-red-600', 'hover:bg-red-50', 'dark:hover:bg-red-900/20');
+                    authActionButton.classList.remove('text-green-600', 'hover:bg-green-50', 'dark:hover:bg-green-900/20');
+                    privateLinks.forEach(link => link.style.display = 'block');
+
+                } else {
+                    // User is a guest or logged out. Just update the UI. Do NOT show the login page.
+                    userAvatar.classList.add('hidden');
+                    userIconPlaceholder.classList.remove('hidden');
+                    authActionButton.textContent = 'Log In';
+                    authActionButton.classList.remove('text-red-600', 'hover:bg-red-50', 'dark:hover:bg-red-900/20');
+                    authActionButton.classList.add('text-green-600', 'hover:bg-green-50', 'dark:hover:bg-green-900/20');
+                    privateLinks.forEach(link => link.style.display = 'none');
+                }
+            });
+            
+            // Check for post-redirect donation status
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('donation_success') === 'true') {
+                const amount = urlParams.get('amount');
+                const method = urlParams.get('method');
+                const payer = decodeURIComponent(urlParams.get('payer'));
+                const message = decodeURIComponent(urlParams.get('message'));
+                await recordDonation({
+                    amount: parseFloat(amount),
+                    payerName: payer,
+                    message: message,
+                    method: method
+                });
+                showToast(`Your donation of $${amount} was successful. Thank you!`, 'success');
+                window.history.replaceState({}, document.title, window.location.pathname + "#community");
+                switchPage('community');
+            } else if (urlParams.get('dog_donation_success') === 'true') {
+                const amount = urlParams.get('amount');
+                const method = urlParams.get('method');
+                const dogId = urlParams.get('dogId');
+                const dogName = decodeURIComponent(urlParams.get('dogName'));
+                const payer = decodeURIComponent(urlParams.get('payer'));
+                
+                await recordDogDonation({
+                    dogId: dogId,
+                    dogName: dogName,
+                    amount: parseFloat(amount),
+                    payerName: payer,
+                    method: method
+                });
+                
+                showToast(`Your donation of $${amount} for ${dogName} was successful. Thank you!`, 'success');
+                
+                window.history.replaceState({}, document.title, window.location.pathname + "#my-adoptions");
+                switchPage('my-adoptions');
+            } else if (urlParams.get('donation_cancelled') === 'true') {
+                showToast('Your donation was cancelled.', 'error');
+                const newHash = window.location.hash || '#donate';
+                window.history.replaceState({}, document.title, window.location.pathname + newHash);
+                switchPage(newHash.substring(1));
+            }
+
+
+            setTimeout(async () => {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                         await signInWithCustomToken(auth, __initial_auth_token);
+                    }
+                } catch (error) {
+                    console.error("Auth initialization failed", error);
+                }
+            }, 100);
+
+            document.getElementById('google-login-btn').addEventListener('click', () => {
+                const provider = new GoogleAuthProvider();
+                signInWithPopup(auth, provider).catch(error => showLoginNotification(error.message, 'error'));
+            });
+
+            document.getElementById('guest-login-btn').addEventListener('click', () => {
+                signInAnonymously(auth)
+                    .then(() => {
+                        // On successful anonymous sign-in, fade out the login page
+                        const loginPage = document.getElementById('login-page');
+                        loginPage.classList.add('fade-out');
+                        setTimeout(() => loginPage.style.display = 'none', 500);
+                    })
+                    .catch(error => showLoginNotification(error.message, 'error'));
+            });
+
+            document.getElementById('email-auth-btn').addEventListener('click', async () => {
+                const email = document.getElementById('email-input').value;
+                const password = document.getElementById('password-input').value;
+                const isSignUp = document.getElementById('email-auth-btn').textContent === 'Sign Up';
+                const btn = document.getElementById('email-auth-btn');
+
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+                hideLoginNotification();
+
+                try {
+                    if (isSignUp) {
+                        await createUserWithEmailAndPassword(auth, email, password);
+                    } else {
+                        await signInWithEmailAndPassword(auth, email, password);
+                    }
+                } catch (error) {
+                    let message = 'An unknown error occurred.';
+                    if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                        message = 'Invalid credentials. Please try again.';
+                    } else if (error.code === 'auth/email-already-in-use') {
+                        message = 'An account with this email already exists.';
+                    } else if (error.code === 'auth/weak-password') {
+                         message = 'Password should be at least 6 characters.';
+                    }
+                    showLoginNotification(message, 'error');
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = isSignUp ? 'Sign Up' : 'Sign In';
+                }
+            });
+            
+            document.getElementById('auth-toggle-text').addEventListener('click', (e) => {
+                e.preventDefault();
+                const isSignUp = e.target.id === 'show-signup';
+                document.getElementById('auth-title').textContent = isSignUp ? 'Create an account' : 'Join Our Community';
+                document.getElementById('email-auth-btn').textContent = isSignUp ? 'Sign Up' : 'Sign In';
+                document.getElementById('auth-toggle-text').innerHTML = isSignUp 
+                    ? `Already have an account? <a href="#" id="show-login" class="font-bold text-orange-500 hover:underline">Sign in</a>`
+                    : `Don't have an account? <a href="#" id="show-signup" class="font-bold text-orange-500 hover:underline">Sign up</a>`;
+            });
+
+            document.getElementById('forgot-password-link').addEventListener('click', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email-input').value;
+                if (!email) {
+                    showLoginNotification('Please enter your email to get a password reset link.', 'error');
+                    return;
+                }
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    showLoginNotification('Password reset email sent! Check your inbox.', 'success');
+                } catch (error) {
+                    showLoginNotification('Could not send reset email. Please check the address.', 'error');
+                }
+            });
+
+            ['email-input', 'password-input'].forEach(id => {
+                document.getElementById(id).addEventListener('input', hideLoginNotification);
+            });
+
+
+            setupEventListeners();
+            setupScrollAnimations();
+            setupHeaderScroll();
+            setupFirestoreListeners();
+            setupDarkMode();
+            renderDonationAmounts();
+            updateDonationSummary();
+            
+            // Handle initial page view based on hash
+            const hash = window.location.hash.substring(1);
+            const urlParamsAfterRedirect = new URLSearchParams(window.location.search);
+            if (urlParamsAfterRedirect.get('donation_success') !== 'true' && urlParamsAfterRedirect.get('dog_donation_success') !== 'true' && urlParamsAfterRedirect.get('donation_cancelled') !== 'true' ) {
+                switchPage(hash || 'home');
+            }
+
+        });
+    </script>
+</body>
+</html>

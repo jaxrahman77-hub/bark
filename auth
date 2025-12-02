@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set New Password - Adele Rescue</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11.25 16.25h1.5L12 17z'/%3E%3Cpath d='M16 14v.5'/%3E%3Cpath d='M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309'/%3E%3Cpath d='M8 14v.5'/%3E%3Cpath d='M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5'/%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md">
+            <div class="flex justify-center items-center space-x-3 mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10 text-orange-500"><path d="M11.25 16.25h1.5L12 17z"/><path d="M16 14v.5"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309"/><path d="M8 14v.5"/><path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/></svg>
+                <h1 class="text-3xl font-bold" style="font-family: 'Poppins', sans-serif;">Adele Rescue</h1>
+            </div>
+
+            <div id="action-container" class="bg-white p-8 rounded-2xl shadow-xl space-y-6">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, verifyPasswordResetCode, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+           apiKey: "AIzaSyBEV2EHIX-gpWHvDGRW7-jS5vgUjh116t0",
+  authDomain: "adeledogrescueus.firebaseapp.com",
+  databaseURL: "https://adeledogrescueus-default-rtdb.firebaseio.com",
+  projectId: "adeledogrescueus",
+  storageBucket: "adeledogrescueus.firebasestorage.app",
+  messagingSenderId: "167907994269",
+  appId: "1:167907994269:web:a7925f013e1a5834f5c274",
+  measurementId: "G-DBEJNEQPT9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const actionContainer = document.getElementById('action-container');
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        const oobCode = urlParams.get('oobCode');
+
+        // --- UI Templates ---
+        const showLoading = () => {
+            actionContainer.innerHTML = `<div class="text-center p-8"><i class="fa-solid fa-spinner fa-spin text-4xl text-orange-500"></i><p class="mt-4 font-semibold">Verifying link...</p></div>`;
+        };
+
+        const showResetForm = (email) => {
+            actionContainer.innerHTML = `
+                <div>
+                    <h2 class="text-2xl font-bold text-center">Create a New Password</h2>
+                    <p class="text-center text-slate-500 mt-2 text-sm">Create a new password for ${email}.</p>
+                </div>
+                <div id="reset-notification" class="hidden p-3 rounded-lg text-sm font-semibold"></div>
+                <form id="reset-form" class="space-y-4">
+                    <div>
+                        <label for="new-password" class="font-semibold sr-only">New Password</label>
+                        <input type="password" id="new-password" placeholder="New Password" class="w-full p-3 rounded-lg bg-slate-100 border-transparent focus:ring-2 focus:ring-orange-500" required>
+                    </div>
+                    <div>
+                        <label for="confirm-password" class="font-semibold sr-only">Confirm New Password</label>
+                        <input type="password" id="confirm-password" placeholder="Confirm New Password" class="w-full p-3 rounded-lg bg-slate-100 border-transparent focus:ring-2 focus:ring-orange-500" required>
+                    </div>
+                    <button id="reset-btn" type="submit" class="w-full py-3 px-4 bg-slate-800 text-white rounded-lg shadow-sm hover:bg-slate-700 transition-colors font-bold flex items-center justify-center">
+                        <span>Set New Password</span>
+                    </button>
+                </form>
+            `;
+
+            document.getElementById('reset-form').addEventListener('submit', handlePasswordReset);
+        };
+
+        const showMessage = (title, message, isSuccess = false) => {
+            const icon = isSuccess 
+                ? `<i class="fa-solid fa-circle-check text-green-500 text-4xl"></i>` 
+                : `<i class="fa-solid fa-circle-xmark text-red-500 text-4xl"></i>`;
+            
+            actionContainer.innerHTML = `
+                <div class="text-center space-y-4 py-8">
+                    ${icon}
+                    <h2 class="text-2xl font-bold">${title}</h2>
+                    <p class="text-slate-500">${message}</p>
+                    <a href="index.html" class="inline-block mt-4 text-sm font-semibold text-orange-500 hover:underline">Return to Login Page</a>
+                </div>
+            `;
+        };
+
+        const showNotification = (message, type = 'error') => {
+            const notificationEl = document.getElementById('reset-notification');
+            if (!notificationEl) return;
+            notificationEl.textContent = message;
+            notificationEl.className = `p-3 rounded-lg text-sm font-semibold ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+            notificationEl.classList.remove('hidden');
+        }
+
+
+        // --- Logic Handler ---
+        const handlePasswordReset = async (e) => {
+            e.preventDefault();
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const resetBtn = document.getElementById('reset-btn');
+
+            if (newPassword.length < 6) {
+                showNotification('Password must be at least 6 characters long.', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showNotification('Passwords do not match.', 'error');
+                return;
+            }
+
+            resetBtn.disabled = true;
+            resetBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+            try {
+                await confirmPasswordReset(auth, oobCode, newPassword);
+                showMessage('Password Reset!', 'Your password has been changed successfully. You can now log in with your new password.', true);
+            } catch (error) {
+                console.error("Error confirming password reset:", error);
+                let message = 'An error occurred. Please try requesting a new reset link.';
+                if (error.code === 'auth/expired-action-code') {
+                    message = 'This password reset link has expired. Please request a new one.';
+                } else if (error.code === 'auth/invalid-action-code') {
+                    message = 'This password reset link is invalid or has already been used.';
+                }
+                showMessage('Action Failed', message, false);
+            }
+        };
+
+
+        // --- Initial Page Load Logic ---
+        const initialize = async () => {
+            if (mode !== 'resetPassword' || !oobCode) {
+                showMessage('Invalid Link', 'This link is not valid. Please ensure you have the correct URL.');
+                return;
+            }
+            
+            showLoading();
+
+            try {
+                const email = await verifyPasswordResetCode(auth, oobCode);
+                showResetForm(email);
+            } catch (error) {
+                console.error("Error verifying code:", error);
+                let message = 'An error occurred. Please try requesting a new reset link.';
+                if (error.code === 'auth/expired-action-code') {
+                    message = 'This password reset link has expired. Please request a new one.';
+                } else if (error.code === 'auth/invalid-action-code') {
+                    message = 'This password reset link is invalid or has already been used.';
+                }
+                showMessage('Invalid Link', message, false);
+            }
+        };
+
+        initialize();
+
+    </script>
+</body>
+</html>
